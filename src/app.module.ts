@@ -6,6 +6,7 @@ import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { upperDirectiveTransformer } from './common/directives/upper-case.directive';
 import { AppService } from './app.service';
 import { AppResolver } from './app.resolver';
+import { RecipesModule } from './recipes/recipes.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AppResolver } from './app.resolver';
         ],
       },
     }),
+    RecipesModule,
   ],
   providers: [AppResolver, AppService],
 })
