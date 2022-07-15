@@ -4,15 +4,15 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
 
 import { upperDirectiveTransformer } from './common/directives/upper-case.directive';
-import { AppService } from './app.service';
-import { AppResolver } from './app.resolver';
-import { RecipesModule } from './recipes/recipes.module';
+import { CatsModule } from './cats/cats.module';
+import { OwnersModule } from './owners/owners.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
+      sortSchema: true,
       transformSchema: (schema) => upperDirectiveTransformer(schema, 'upper'),
       installSubscriptionHandlers: true,
       buildSchemaOptions: {
@@ -24,8 +24,8 @@ import { RecipesModule } from './recipes/recipes.module';
         ],
       },
     }),
-    RecipesModule,
+    CatsModule,
+    OwnersModule,
   ],
-  providers: [AppResolver, AppService],
 })
 export class AppModule {}
