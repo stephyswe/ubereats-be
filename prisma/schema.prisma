@@ -11,7 +11,20 @@ datasource db {
 }
 
 model Restaurant {
-  id            Int      @id @default(autoincrement())
-  name          String
-  address       String
+  id      Int    @id @default(autoincrement())
+  name    String
+  address String
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     UserRole @default(Client)
+}
+
+enum UserRole {
+  Client
+  Owner
+  Delivery
 }

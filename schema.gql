@@ -2,21 +2,39 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateAccountInput {
+  data: CreateAccountInputType!
+}
+
+input CreateAccountInputType {
+  email: String!
+  password: String!
+  role: String!
+}
+
+type CreateAccountOutput {
+  error: String
+  ok: Boolean!
+}
+
 input CreateRestaurantInput {
   data: CreateRestaurantInputType!
 }
 
 input CreateRestaurantInputType {
   address: String!
+  categoryName: String!
   name: String!
 }
 
 type Mutation {
+  createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInput!): Boolean!
   updateRestaurant(input: UpdateRestaurantInput!): Boolean!
 }
 
 type Query {
+  hi: Boolean!
   restaurants: [Restaurant!]!
 }
 
@@ -37,5 +55,6 @@ input UpdateRestaurantInput {
 
 input UpdateRestaurantInputType {
   address: String
+  categoryName: String
   name: String
 }

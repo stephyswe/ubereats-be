@@ -4,13 +4,13 @@ import { Prisma } from '@prisma/client';
 @InputType()
 export class CreateRestaurantInputType {
   @Field(() => String)
-  name!: string | undefined;
+  name: string | undefined;
 
   @Field(() => String)
-  address!: string;
+  address: string;
 
-  /*  @Field(() => String)
-  categoryName!: string; */
+  @Field(() => String)
+  categoryName: string;
 }
 
 @InputType()
