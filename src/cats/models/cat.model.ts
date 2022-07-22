@@ -5,11 +5,13 @@ export class Owner {
   @Field(() => Int)
   id?: number;
 
+  @Field()
   name: string;
 
   @Field(() => Int)
   age?: number;
 
+  @Field(() => [Cat])
   cats?: Cat[];
 }
 
@@ -18,10 +20,12 @@ export class Cat {
   @Field(() => Int)
   id?: number;
 
+  @Field()
   name?: string;
 
   @Field(() => Int)
   age?: number;
 
+  @Field(() => Owner)
   owner?: Owner;
 }

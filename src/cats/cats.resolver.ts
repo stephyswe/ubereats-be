@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
@@ -15,18 +16,20 @@ export class CatsResolver {
 
   @Query(() => [Cat], { name: 'cats' })
   @UseGuards(CatsGuard)
-  getCats() {
-    return this.catsService.findAll();
+  async getCats(): Promise<Cat[]> {
+    return this.catsService.findMany();
   }
 
   @Query(() => Cat, { name: 'cat' })
-  async findOneById(@Args('id', ParseIntPipe) id: number): Promise<Cat> {
-    return this.catsService.findOneById(id);
+  async findOne(@Args('id', ParseIntPipe) id: number): Promise<Cat> {
+    return this.catsService.findOne({ id });
   }
 
   @Mutation(() => Cat, { name: 'createCat' })
-  async create(@Args('createCatInput') args: CreateCatInput): Promise<Cat> {
-    const createdCat = await this.catsService.create(args);
+  async create(
+    @Args('createCatInput') createCatInput: CreateCatInput,
+  ): Promise<Cat> {
+    const createdCat = await this.catsService.create(createCatInput);
     pubSub.publish('catCreated', { catCreated: createdCat });
     return createdCat;
   }

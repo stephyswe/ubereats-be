@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Owner } from '../cats/models/cat.model';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class OwnersService {
-  private readonly owners: Owner[] = [{ id: 1, name: 'Jon', age: 5 }];
+  constructor(private prisma: PrismaService) {}
 
-  findOneById(id: number): Owner {
-    return this.owners.find((owner) => owner.id === id);
+  findOne(ownerWhereUniqueInput: Prisma.OwnerWhereUniqueInput) {
+    return this.prisma.owner.findUnique({
+      where: ownerWhereUniqueInput,
+    });
   }
 }

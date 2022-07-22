@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: gqlcodepg
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gqlcodepg_db
+      POSTGRES_PORT: 5432
+    volumes:
+    - /data/gqlcodepg:/data/postgres

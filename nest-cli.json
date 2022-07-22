@@ -4,15 +4,6 @@
   "compilerOptions": {
     "plugins": [
       {
-        "name": "@nestjs/graphql/plugin",
-        "options": {
-          "typeFileNameSuffix": [
-            ".input.ts",
-            ".model.ts"
-          ]
-        }
-      },
-      {
         "name": "@nestjs/graphql",
         "options": {
           "introspectComments": true

@@ -8,6 +8,6 @@ export class CatOwnerResolver {
 
   @ResolveField()
   async owner(@Parent() cat: Cat & { ownerId: number }): Promise<Owner> {
-    return this.ownersService.findOneById(cat.ownerId);
+    return this.ownersService.findOne({ id: cat.ownerId });
   }
 }

@@ -2,8 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-directive @upper on FIELD_DEFINITION
-
 type Cat {
   age: Int
   id: Int
@@ -16,6 +14,7 @@ type Cat {
 """
 input CreateCatInput {
   age: Float!
+  name: String!
 }
 
 type Mutation {
