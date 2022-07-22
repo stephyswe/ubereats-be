@@ -17,10 +17,12 @@ model Restaurant {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  role     UserRole @default(Client)
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      UserRole @default(Client)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 enum UserRole {
