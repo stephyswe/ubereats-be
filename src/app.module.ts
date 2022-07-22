@@ -1,12 +1,10 @@
+import { RestaurantsModule } from './restaurants/restaurants.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { DirectiveLocation, GraphQLDirective } from 'graphql';
+
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { upperDirectiveTransformer } from './common/directives/upper-case.directive';
-
-import { CatsModule } from './cats/cats.module';
-import { OwnersModule } from './owners/owners.module';
 
 @Module({
   imports: [
@@ -19,8 +17,7 @@ import { OwnersModule } from './owners/owners.module';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
-    CatsModule,
-    OwnersModule,
+    RestaurantsModule,
   ],
 })
 export class AppModule {}

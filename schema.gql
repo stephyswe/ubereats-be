@@ -2,37 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Cat {
-  age: Int
-  id: Int
-  name: String
-  owner: Owner
-}
-
-"""
-"Test comment"
-"""
-input CreateCatInput {
-  age: Float!
-  name: String!
-}
-
 type Mutation {
-  createCat(createCatInput: CreateCatInput!): Cat!
-}
-
-type Owner {
-  age: Int
-  cats: [Cat!]
-  id: Int
-  name: String!
+  createRestaurant: Boolean!
 }
 
 type Query {
-  cat(id: Float!): Cat!
-  cats: [Cat!]!
+  restaurants: [Restaurant!]!
 }
 
-type Subscription {
-  catCreated: Cat!
+type Restaurant {
+  address: String!
+  id: Float!
+  isVegan: Boolean!
+  name: String!
 }

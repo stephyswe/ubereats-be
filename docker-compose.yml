@@ -2,7 +2,7 @@ version: "3"
 
 services:
   postgres:
-    container_name: gqlcodepg
+    container_name: gqlnuberpg
     image: postgres:latest
     restart: always
     ports:
@@ -11,7 +11,7 @@ services:
       POSTGRES_HOST: localhost
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: gqlcodepg_db
+      POSTGRES_DB: gqlnuberpg_db
       POSTGRES_PORT: 5432
     volumes:
-    - /data/gqlcodepg:/data/postgres
+    - /data/gqlnuberpg:/data/postgres

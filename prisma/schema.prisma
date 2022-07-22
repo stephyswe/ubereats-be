@@ -10,17 +10,9 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-model Cat {
-  id      Int     @id @default(autoincrement())
-  name    String?
-  age     Int?
-  owner   Owner?  @relation(fields: [ownerId], references: [id])
-  ownerId Int?
-}
-
-model Owner {
-  id   Int    @id @default(autoincrement())
-  name String
-  age  Int?
-  cats Cat[]
+model Restaurant {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  isVegan   Boolean?
+  address   String?
 }
