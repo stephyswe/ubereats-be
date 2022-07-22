@@ -1,5 +1,20 @@
-import { ArgsType, OmitType } from '@nestjs/graphql';
-import { Restaurant } from '../model/restaurant.model';
+import { Field, InputType } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 
-@ArgsType()
-export class CreateRestaurantDto extends OmitType(Restaurant, ['id']) {}
+@InputType()
+export class CreateRestaurantInputType {
+  @Field(() => String)
+  name!: string | undefined;
+
+  @Field(() => String)
+  address!: string;
+
+  /*  @Field(() => String)
+  categoryName!: string; */
+}
+
+@InputType()
+export class CreateRestaurantInput {
+  @Field(() => CreateRestaurantInputType)
+  data: Prisma.RestaurantCreateInput;
+}

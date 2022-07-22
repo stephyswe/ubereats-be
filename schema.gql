@@ -2,8 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateRestaurantInput {
+  data: CreateRestaurantInputType!
+}
+
+input CreateRestaurantInputType {
+  address: String!
+  name: String!
+}
+
 type Mutation {
-  createRestaurant: Boolean!
+  createRestaurant(createRestaurantDto: CreateRestaurantInput!): Boolean!
+  updateRestaurant(input: UpdateRestaurantInput!): Boolean!
 }
 
 type Query {
@@ -13,6 +23,19 @@ type Query {
 type Restaurant {
   address: String!
   id: Float!
-  isVegan: Boolean!
   name: String!
+}
+
+input RestaurantUpdateInput {
+  id: Float!
+}
+
+input UpdateRestaurantInput {
+  data: UpdateRestaurantInputType!
+  where: RestaurantUpdateInput!
+}
+
+input UpdateRestaurantInputType {
+  address: String
+  name: String
 }

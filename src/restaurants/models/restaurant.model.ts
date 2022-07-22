@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { IsString, Length } from 'class-validator';
 
 @ObjectType()
 export class Restaurant {
@@ -6,11 +7,11 @@ export class Restaurant {
   id: number;
 
   @Field(() => String)
+  @IsString()
+  @Length(5, 15)
   name: string;
 
-  @Field(() => Boolean)
-  isVegan: boolean;
-
   @Field(() => String)
+  @IsString()
   address: string;
 }

@@ -11,8 +11,7 @@ datasource db {
 }
 
 model Restaurant {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  isVegan   Boolean?
-  address   String?
+  id            Int      @id @default(autoincrement())
+  name          String
+  address       String
 }
