@@ -17,6 +17,8 @@ import { MailModule } from './mail/mail.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { UsersModule } from './users/users.module';
 
+console.log('env', process.env.NODE_ENV);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
