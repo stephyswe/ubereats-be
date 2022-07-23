@@ -92,4 +92,8 @@ export class UsersService {
       throw new InternalServerErrorException();
     }
   }
+
+  async findById(id: number) {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
 }

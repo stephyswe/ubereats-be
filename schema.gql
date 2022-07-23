@@ -47,6 +47,7 @@ type Mutation {
 
 type Query {
   hi: Boolean!
+  me: User!
   restaurants: [Restaurant!]!
 }
 
@@ -69,4 +70,10 @@ input UpdateRestaurantInputType {
   address: String
   categoryName: String
   name: String
+}
+
+type User {
+  email: String!
+  password: String!
+  role: String!
 }

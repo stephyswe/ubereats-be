@@ -1,4 +1,7 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrentUser } from '../auth/auth-user.decorator';
+import { AuthGuard } from '../auth/auth.guard';
 
 import {
   CreateAccountInput,
@@ -41,5 +44,11 @@ export class UsersResolver {
         error,
       };
     }
+  }
+
+  @Query(() => User)
+  @UseGuards(AuthGuard)
+  me(@CurrentUser() authUser) {
+    return authUser;
   }
 }
