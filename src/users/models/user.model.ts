@@ -28,4 +28,7 @@ export class User extends CoreEntity {
 
   @Field(() => String)
   role: UserRole;
+
+  @Field(() => Boolean)
+  verified?: boolean;
 }

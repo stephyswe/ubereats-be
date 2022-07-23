@@ -2,10 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CoreInputId {
-  id: Float!
-}
-
 input CreateAccountInput {
   data: CreateAccountInputType!
 }
@@ -31,13 +27,9 @@ input CreateRestaurantInputType {
   name: String!
 }
 
-input EditProfileInput {
-  data: EditProfileInputArgs!
-  where: CoreInputId!
-}
-
 input EditProfileInputArgs {
   email: String!
+  verified: Boolean
 }
 
 type EditProfileOutput {
@@ -59,13 +51,13 @@ type LoginOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInput!): Boolean!
-  editProfile(input: EditProfileInput!): EditProfileOutput!
+  editProfile(input: EditProfileInputArgs!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
   updateRestaurant(input: UpdateRestaurantInput!): Boolean!
+  verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
 
 type Query {
-  hi: Boolean!
   me: User!
   restaurants: [Restaurant!]!
   userProfile(userId: Float!): UserProfileOutput!
@@ -96,10 +88,20 @@ type User {
   email: String!
   password: String!
   role: String!
+  verified: Boolean
 }
 
 type UserProfileOutput {
   error: String
   ok: Boolean!
   user: User
+}
+
+input VerifyEmailInput {
+  code: String!
+}
+
+type VerifyEmailOutput {
+  error: String
+  ok: Boolean!
 }
