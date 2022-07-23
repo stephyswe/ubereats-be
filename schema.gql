@@ -27,9 +27,21 @@ input CreateRestaurantInputType {
   name: String!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LoginOutput {
+  error: String
+  ok: Boolean!
+  token: String
+}
+
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInput!): Boolean!
+  login(input: LoginInput!): LoginOutput!
   updateRestaurant(input: UpdateRestaurantInput!): Boolean!
 }
 
