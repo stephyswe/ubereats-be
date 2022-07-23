@@ -9,7 +9,7 @@ import { JwtService } from '../jwt/jwt.service';
 import { MailService } from '../mail/mail.service';
 import { CreateAccountInput } from './dtos/create-account.dto';
 import { EditProfileInputArgs } from './dtos/edit-profile.dto';
-import { LoginInput } from './dtos/login.dto';
+import { LoginInput, LoginOutput } from './dtos/login.dto';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +26,7 @@ export class UsersService {
       const exists = await this.prisma.user.findFirst({
         where: { email: args.data.email },
       });
+
       if (exists) {
         return { ok: false, error: 'There is a user with that email already' };
       }
@@ -48,15 +49,11 @@ export class UsersService {
       return { ok: true };
     } catch (e) {
       // make error
-      console.log('e', e);
       return { ok: false, error: "Couldn't create account" };
     }
   }
 
-  async login({
-    email,
-    password,
-  }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
+  async login({ email, password }: LoginInput): Promise<LoginOutput> {
     // find the user with the email
     // check if the password is correct
     // make a JWT and give it to the user
@@ -65,7 +62,7 @@ export class UsersService {
         where: { email },
       });
 
-      if (!user) return { ok: false, error: 'Wrong user' };
+      if (!user) return { ok: false, error: 'User not found' };
       const passwordCorrect = await this.checkPassword(password, user.password);
       if (!passwordCorrect) return { ok: false, error: 'Wrong password' };
 
@@ -73,7 +70,7 @@ export class UsersService {
 
       return { ok: true, token };
     } catch (error) {
-      return { ok: false, error };
+      return { ok: false, error: `Can't log user in.` };
     }
   }
 
@@ -125,7 +122,7 @@ export class UsersService {
       }
       return { ok: false, error: 'verification not found' };
     } catch (error) {
-      return { ok: false, error };
+      return { ok: false, error: 'Could not verify email.' };
     }
   }
 
