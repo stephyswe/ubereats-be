@@ -1,12 +1,18 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcryptjs';
 import { PrismaService } from '../../prisma/prisma.service';
+import { JwtService } from '../jwt/jwt.service';
 import { CreateAccountInput } from './dtos/create-account.dto';
 import { LoginInput } from './dtos/login.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly config: ConfigService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async createAccount(
     args: CreateAccountInput,
@@ -24,6 +30,7 @@ export class UsersService {
       const newArgs = await this.hashPassword(args);
 
       await this.prisma.user.create(newArgs);
+
       return { ok: true };
     } catch (e) {
       // make error
@@ -51,9 +58,12 @@ export class UsersService {
           error: 'Wrong password',
         };
       }
+
+      const token = this.jwtService.sign(user.id);
+
       return {
         ok: true,
-        token: 'lalala',
+        token,
       };
     } catch (error) {
       return { ok: false, error };
