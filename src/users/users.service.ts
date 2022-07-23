@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { hash } from 'bcryptjs';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateAccountInput } from './dtos/create-account.dto';
 
@@ -6,20 +7,37 @@ import { CreateAccountInput } from './dtos/create-account.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async createAccount(args: CreateAccountInput): Promise<string | undefined> {
+  async createAccount(
+    args: CreateAccountInput,
+  ): Promise<{ ok: boolean; error?: string }> {
     try {
       // check new user
       const exists = await this.prisma.user.findUnique({
         where: { email: args.data.email },
       });
       if (exists) {
-        return 'There is a user with that email already';
+        return { ok: false, error: 'There is a user with that email already' };
       }
-      await this.prisma.user.create(args);
+
+      // hash password
+      const newArgs = await this.hashPassword(args);
+
+      await this.prisma.user.create(newArgs);
+      return { ok: true };
     } catch (e) {
       // make error
-      return `Couldn't create account, ${e}`;
+      return { ok: false, error: "Couldn't create account" };
     }
-    // hash password
+  }
+
+  async hashPassword(args: CreateAccountInput): Promise<CreateAccountInput> {
+    try {
+      const hashedPassword = await hash(args.data.password, 10);
+      args.data.password = hashedPassword;
+      return args;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
   }
 }
