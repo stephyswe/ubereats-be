@@ -70,7 +70,7 @@ export class UsersService {
 
       return { ok: true, token };
     } catch (error) {
-      return { ok: false, error: `Can't log user in.` };
+      return { ok: false, error: `Can't login user.` };
     }
   }
 
@@ -97,7 +97,7 @@ export class UsersService {
       return { ok: true };
     } catch (error) {
       console.log('error', error);
-      return { ok: false, error: 'could not update profile' };
+      return { ok: false, error: 'Could not update profile.' };
     }
   }
 
@@ -120,7 +120,7 @@ export class UsersService {
 
         return { ok: true };
       }
-      return { ok: false, error: 'verification not found' };
+      return { ok: false, error: 'Verification not found.' };
     } catch (error) {
       return { ok: false, error: 'Could not verify email.' };
     }
@@ -158,7 +158,7 @@ export class UsersService {
       const user = await this.prisma.user.findUnique({ where: { id } });
       if (user) return { ok: true, user };
     } catch (error) {
-      return { ok: false, error: 'no user found' };
+      return { ok: false, error: 'User Not Found' };
     }
   }
 }

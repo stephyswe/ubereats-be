@@ -144,5 +144,150 @@ describe('UsersService', () => {
       const result = await service.login(loginArgs);
       expect(result).toEqual({ ok: false, error: 'Wrong password' });
     });
+
+    it('should return token if password correct', async () => {
+      prisma.user.findFirst = jest.fn().mockReturnValueOnce(createArgs);
+      service.checkPassword = jest.fn(() => Promise.resolve(true));
+
+      const result = await service.login(loginArgs);
+
+      expect(jwtService.sign).toHaveBeenCalledTimes(1);
+      expect(jwtService.sign).toHaveBeenCalledWith(expect.any(Number));
+
+      expect(result).toEqual({ ok: true, token: 'signed-token-baby' });
+    });
+
+    it('should fail on exception', async () => {
+      prisma.user.findFirst = jest.fn().mockRejectedValue('error');
+
+      const result = await service.login(loginArgs);
+
+      expect(result).toEqual({ ok: false, error: "Can't login user." });
+    });
+  });
+
+  describe('findById', () => {
+    const findByIdArgs = {
+      id: 1,
+    };
+    it('should find an existing user', async () => {
+      prisma.user.findUnique = jest.fn().mockResolvedValue(findByIdArgs);
+
+      const result = await service.findById(1);
+
+      expect(result).toEqual({ ok: true, user: findByIdArgs });
+    });
+
+    it('should fail if no user is found', async () => {
+      prisma.user.findUnique = jest.fn().mockRejectedValue('error');
+
+      const result = await service.findById(1);
+
+      expect(result).toEqual({ ok: false, error: 'User Not Found' });
+    });
+  });
+
+  describe('editProfile', () => {
+    it('should change email', async () => {
+      const editProfileArgs = {
+        id: 1,
+        input: { email: 'bs@new.com' },
+      };
+      const newVerification = {
+        code: 'code',
+      };
+      const newUser = {
+        verified: false,
+        email: editProfileArgs.input.email,
+        id: editProfileArgs.id,
+      };
+
+      prisma.user.update = jest.fn().mockResolvedValue(newUser);
+
+      prisma.verification.create = jest.fn().mockResolvedValue(newVerification);
+
+      await service.editProfile(editProfileArgs.id, editProfileArgs.input);
+
+      expect(prisma.user.update).toHaveBeenCalledTimes(1);
+
+      expect(prisma.verification.create).toHaveBeenCalledWith({
+        data: {
+          code: expect.stringMatching(mockRegexUUID),
+          userId: 1,
+        },
+      });
+
+      expect(mailService.sendVerificationEmail).toHaveBeenCalledTimes(1);
+      expect(mailService.sendVerificationEmail).toHaveBeenCalledWith(
+        newUser.email,
+        newVerification.code,
+      );
+    });
+
+    it('should fail on exception', async () => {
+      prisma.user.update = jest.fn().mockRejectedValue('error');
+
+      const result = await service.editProfile(1, { email: '12' });
+
+      expect(result).toEqual({ ok: false, error: 'Could not update profile.' });
+    });
+  });
+
+  describe('verifyEmail', () => {
+    it('should verify email', async () => {
+      const mockedVerification = {
+        user: {
+          verified: false,
+        },
+        userId: 1,
+        id: 10,
+      };
+
+      prisma.verification.findFirst = jest
+        .fn()
+        .mockResolvedValue(mockedVerification);
+      prisma.user.update = jest.fn().mockResolvedValue({ id: '' });
+      prisma.verification.delete = jest.fn();
+
+      const result = await service.verifyEmail('');
+
+      expect(prisma.verification.findFirst).toHaveBeenCalledTimes(1);
+      expect(prisma.verification.findFirst).toHaveBeenCalledWith({
+        include: { user: true },
+        where: { code: '' },
+      });
+
+      expect(prisma.user.update).toHaveBeenCalledTimes(1);
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        data: { verified: true },
+        where: { id: 1 },
+      });
+
+      expect(prisma.verification.delete).toHaveBeenCalledTimes(1);
+      expect(prisma.verification.delete).toHaveBeenCalledWith({
+        where: { id: 10 },
+      });
+
+      expect(result).toEqual({ ok: true });
+    });
+
+    it('should fail on verification not found', async () => {
+      prisma.verification.findFirst = jest.fn().mockResolvedValue(undefined);
+
+      const result = await service.verifyEmail('');
+
+      expect(result).toEqual({ ok: false, error: 'Verification not found.' });
+    });
+
+    it('should fail on exception', async () => {
+      prisma.verification.findFirst = jest.fn().mockRejectedValue('error');
+
+      const result = await service.verifyEmail('');
+
+      expect(result).toEqual({ ok: false, error: 'Could not verify email.' });
+    });
+
+    it.todo('userProfile');
+    it.todo('me');
   });
 });
