@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CoreOutput } from '../common/dtos/output.dto';
 import { JwtService } from '../jwt/jwt.service';
+import { MailService } from '../mail/mail.service';
 import { CreateAccountInput } from './dtos/create-account.dto';
 import { EditProfileInputArgs } from './dtos/edit-profile.dto';
 import { LoginInput } from './dtos/login.dto';
@@ -16,6 +17,7 @@ export class UsersService {
     private prisma: PrismaService,
     private readonly config: ConfigService,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async createAccount(args: CreateAccountInput): Promise<CoreOutput> {
@@ -33,12 +35,15 @@ export class UsersService {
 
       const user = await this.prisma.user.create(newArgs);
 
-      await this.prisma.verification.create({
+      const verification = await this.prisma.verification.create({
         data: {
           code: uuidv4(),
           userId: user.id,
         },
       });
+
+      // send vert. email
+      this.mailService.sendVerificationEmail(user.email, verification.code);
 
       return { ok: true };
     } catch (e) {
@@ -77,10 +82,21 @@ export class UsersService {
       if (params.email) {
         params.verified = false;
       }
-      await this.prisma.user.update({
+      const user = await this.prisma.user.update({
         where: { id },
         data: params,
       });
+
+      const verification = await this.prisma.verification.create({
+        data: {
+          code: uuidv4(),
+          userId: user.id,
+        },
+      });
+
+      // send vert. email
+      this.mailService.sendVerificationEmail(user.email, verification.code);
+
       return { ok: true };
     } catch (error) {
       console.log('error', error);
@@ -99,6 +115,10 @@ export class UsersService {
         await this.prisma.user.update({
           where: { id: verification.userId },
           data: { verified: true },
+        });
+
+        await this.prisma.verification.delete({
+          where: { id: verification.id },
         });
 
         return { ok: true };
