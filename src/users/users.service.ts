@@ -4,6 +4,7 @@ import { compare, hash } from 'bcryptjs';
 import { PrismaService } from '../../prisma/prisma.service';
 import { JwtService } from '../jwt/jwt.service';
 import { CreateAccountInput } from './dtos/create-account.dto';
+import { EditProfileInput } from './dtos/edit-profile.dto';
 import { LoginInput } from './dtos/login.dto';
 
 @Injectable()
@@ -19,7 +20,7 @@ export class UsersService {
   ): Promise<{ ok: boolean; error?: string }> {
     try {
       // check new user
-      const exists = await this.prisma.user.findUnique({
+      const exists = await this.prisma.user.findFirst({
         where: { email: args.data.email },
       });
       if (exists) {
@@ -34,6 +35,7 @@ export class UsersService {
       return { ok: true };
     } catch (e) {
       // make error
+      console.log('e', e);
       return { ok: false, error: "Couldn't create account" };
     }
   }
@@ -46,7 +48,7 @@ export class UsersService {
     // check if the password is correct
     // make a JWT and give it to the user
     try {
-      const user = await this.prisma.user.findUnique({
+      const user = await this.prisma.user.findFirst({
         where: { email },
       });
 
@@ -68,6 +70,10 @@ export class UsersService {
     } catch (error) {
       return { ok: false, error };
     }
+  }
+
+  async editProfile(params: EditProfileInput) {
+    return this.prisma.user.update(params);
   }
 
   async checkPassword(

@@ -16,8 +16,6 @@ import { JwtModule } from './jwt/jwt.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { UsersModule } from './users/users.module';
 
-console.log('dev', process.env.NODE_ENV);
-
 @Module({
   imports: [
     ConfigModule.forRoot({

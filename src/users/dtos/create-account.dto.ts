@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
-import { MutationOutput } from '../../common/dtos/output.dto';
+import { CoreOutput } from '../../common/dtos/output.dto';
 import { UserRole } from '../models/user.model';
 
 @InputType()
@@ -22,4 +22,4 @@ export class CreateAccountInput {
 }
 
 @ObjectType()
-export class CreateAccountOutput extends MutationOutput {}
+export class CreateAccountOutput extends CoreOutput {}

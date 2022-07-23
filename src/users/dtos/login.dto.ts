@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
-import { MutationOutput } from '../../common/dtos/output.dto';
+import { CoreOutput } from '../../common/dtos/output.dto';
 
 @InputType()
 export class LoginInput {
@@ -13,7 +13,7 @@ export class LoginInput {
 }
 
 @ObjectType()
-export class LoginOutput extends MutationOutput {
+export class LoginOutput extends CoreOutput {
   @Field(() => String, { nullable: true })
   token?: string;
 }
