@@ -9,11 +9,26 @@
 
 ## User CRUD:
 
-- Create Account
-- Log In
-- See Profile
-- Edit Profile
-- Verify Email
+* Create Account
+* Log In
+* See Profile
+* Edit Profile
+* Verify Email
+
+## Restaurant CRUD:
+
+* Edit Restaurant 
+- Delete Restaurant
+
+- See Categories
+- See Restaurants by Category (pagination)
+- See Restaurants (pagination)
+- See Restaurant
+
+- Create Dish
+- Edit Dish
+- Delete Dish
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.

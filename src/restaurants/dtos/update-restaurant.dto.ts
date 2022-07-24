@@ -1,24 +1,30 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, PartialType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
-
+import { CoreOutput } from '../../common/dtos/output.dto';
 import { CreateRestaurantInputArgs } from './create-restaurant.dto';
 
 @InputType()
-class UpdateRestaurantInputArgs extends PartialType(
+export class UpdateRestaurantInputArgs extends PartialType(
   CreateRestaurantInputArgs,
-) {}
+) {
+  @Field(() => Number)
+  restaurantId: number;
+}
 
 @InputType()
-class RestaurantUpdateInputId {
+class UpdateInRestaurantId {
   @Field()
   id: number;
 }
 
 @InputType()
 export class UpdateRestaurantInput {
-  @Field(() => RestaurantUpdateInputId)
+  @Field(() => UpdateInRestaurantId)
   where: Prisma.RestaurantWhereUniqueInput;
 
   @Field(() => UpdateRestaurantInputArgs)
   data: Prisma.RestaurantUpdateInput;
 }
+
+@ObjectType()
+export class UpdateRestaurantOutput extends CoreOutput {}

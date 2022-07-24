@@ -3,7 +3,7 @@ import { CreateRestaurantInputArgs } from './dtos/create-restaurant.dto';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { User } from '../users/models/user.model';
-import { UpdateRestaurantInput } from './dtos/update-restaurant.dto';
+import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
 
 @Injectable()
 export class RestaurantService {
@@ -13,20 +13,25 @@ export class RestaurantService {
     return this.prisma.restaurant.findMany();
   }
 
+  async categoryFindOrCreate(name: string) {
+    const categoryName = name.trim().toLowerCase();
+    const categorySlug = categoryName.replace(/ /g, '-');
+    let category = await this.prisma.category.findFirst({
+      where: { slug: categorySlug },
+    });
+    if (!category) {
+      category = await this.prisma.category.create({
+        data: { slug: categorySlug, name: categoryName },
+      });
+    }
+    return category;
+  }
+
   async create(owner: User, createRestaurantInput: CreateRestaurantInputArgs) {
     try {
-      const categoryName = createRestaurantInput.categoryName
-        .trim()
-        .toLowerCase();
-      const categorySlug = categoryName.replace(/ /g, '-');
-      let category = await this.prisma.category.findFirst({
-        where: { slug: categorySlug },
-      });
-      if (!category) {
-        category = await this.prisma.category.create({
-          data: { slug: categorySlug, name: categoryName },
-        });
-      }
+      const category = await this.categoryFindOrCreate(
+        createRestaurantInput.categoryName,
+      );
 
       delete createRestaurantInput.categoryName;
 
@@ -48,7 +53,44 @@ export class RestaurantService {
     }
   }
 
-  update(params: UpdateRestaurantInput) {
-    return this.prisma.restaurant.update(params);
+  async update(owner: User, params: UpdateRestaurantInputArgs) {
+    try {
+      const id = params.restaurantId;
+      const categoryName = params.categoryName;
+      let category = null;
+
+      delete params.categoryName;
+      delete params.restaurantId;
+
+      const restaurant = await this.prisma.restaurant.findFirst({
+        where: { id },
+      });
+
+      if (!restaurant) return { ok: false, error: 'Restaurant not found' };
+
+      if (owner.id !== restaurant.userId) {
+        return {
+          ok: false,
+          error: "You can't edit a restaurant you don't own.",
+        };
+      }
+
+      if (categoryName) {
+        category = await this.categoryFindOrCreate(categoryName);
+      }
+
+      await this.prisma.restaurant.update({
+        where: { id },
+        data: {
+          ...params,
+          categoryId: category.id,
+        },
+      });
+
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, error };
+    }
+    //
   }
 }
