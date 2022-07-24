@@ -10,6 +10,16 @@ type Category {
   slug: String!
 }
 
+input CategoryInput {
+  slug: String!
+}
+
+type CategoryOutput {
+  category: Category
+  error: String
+  ok: Boolean!
+}
+
 input CreateAccountInput {
   data: CreateAccountInputType!
 }
@@ -84,6 +94,7 @@ type Mutation {
 }
 
 type Query {
+  category(input: CategoryInput!): CategoryOutput!
   findManyCategories: FindManyCategoriesOutput!
   me: User!
   restaurants: [Restaurant!]!

@@ -20,8 +20,8 @@
 * Edit Restaurant 
 * Delete Restaurant
 
-- See Categories
-- See Restaurants by Category (pagination)
+* See Categories
+* See Restaurants by Category (pagination)
 - See Restaurants (pagination)
 - See Restaurant
 
