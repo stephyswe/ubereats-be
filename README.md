@@ -18,7 +18,7 @@
 ## Restaurant CRUD:
 
 * Edit Restaurant 
-- Delete Restaurant
+* Delete Restaurant
 
 - See Categories
 - See Restaurants by Category (pagination)

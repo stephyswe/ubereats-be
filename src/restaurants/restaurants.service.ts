@@ -3,6 +3,10 @@ import { CreateRestaurantInputArgs } from './dtos/create-restaurant.dto';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { User } from '../users/models/user.model';
+import {
+  DeleteRestaurantInput,
+  DeleteRestaurantOutput,
+} from './dtos/delete-restaurant.dto';
 import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
 
 @Injectable()
@@ -91,6 +95,37 @@ export class RestaurantService {
     } catch (error) {
       return { ok: false, error };
     }
-    //
+  }
+
+  async delete(
+    owner: User,
+    { restaurantId }: DeleteRestaurantInput,
+  ): Promise<DeleteRestaurantOutput> {
+    try {
+      const restaurant = await this.prisma.restaurant.findUnique({
+        where: { id: restaurantId },
+      });
+      if (!restaurant) {
+        return {
+          ok: false,
+          error: 'Restaurant not found',
+        };
+      }
+      if (owner.id !== restaurant.userId) {
+        return {
+          ok: false,
+          error: "You can't delete a restaurant that you don't own",
+        };
+      }
+      await this.prisma.restaurant.delete({ where: { id: restaurantId } });
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not delete restaurant.',
+      };
+    }
   }
 }
