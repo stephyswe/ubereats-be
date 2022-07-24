@@ -4,9 +4,9 @@ import { CoreInputId } from '../../common/dtos/output.dto';
 import { Restaurant } from '../../restaurants/models/restaurant.model';
 
 export enum UserRole {
-  Client,
-  Owner,
-  Delivery,
+  Client = 'Client',
+  Owner = 'Owner',
+  Delivery = 'Delivery',
 }
 
 registerEnumType(UserRole, { name: 'UserRole' });

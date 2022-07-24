@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import * as Joi from 'joi';
+import { AuthModule } from './auth/auth.module';
 
 import { upperDirectiveTransformer } from './common/directives/upper-case.directive';
 import { JwtMiddleware } from './jwt/jwt.middleware';
@@ -40,6 +41,7 @@ import { UsersModule } from './users/users.module';
       },
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+    AuthModule,
     RestaurantsModule,
     UsersModule,
     JwtModule.forRoot({
