@@ -1,7 +1,8 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsOptional } from 'class-validator';
-import { CoreInputId, CoreOutput } from 'src/common/dtos/output.dto';
+
+import { CoreInputId, CoreOutput } from '../../common/dtos/output.dto';
 
 @ObjectType()
 export class EditProfileOutput extends CoreOutput {}
@@ -19,8 +20,8 @@ export class EditProfileInputArgs {
 @InputType()
 export class EditProfileInput {
   @Field(() => CoreInputId)
-  where: Prisma.RestaurantWhereUniqueInput;
+  where: Prisma.UserWhereUniqueInput;
 
   @Field(() => EditProfileInputArgs)
-  data: Prisma.RestaurantUpdateInput;
+  data: Prisma.UserUpdateInput;
 }
