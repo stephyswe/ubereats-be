@@ -36,6 +36,15 @@ type CreateRestaurantOutput {
   ok: Boolean!
 }
 
+input DeleteRestaurantInput {
+  restaurantId: Float!
+}
+
+type DeleteRestaurantOutput {
+  error: String
+  ok: Boolean!
+}
+
 input EditProfileInputArgs {
   email: String!
   verified: Boolean
@@ -60,6 +69,7 @@ type LoginOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInputArgs!): CreateRestaurantOutput!
+  deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   editProfile(input: EditProfileInputArgs!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
   updateRestaurant(input: UpdateRestaurantInputArgs!): UpdateRestaurantOutput!
