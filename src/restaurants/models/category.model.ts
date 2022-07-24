@@ -1,9 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
+import { CoreInputId } from './../../common/dtos/output.dto';
 import { Restaurant } from './restaurant.model';
 
 @ObjectType()
-export class Category {
+export class Category extends CoreInputId {
   @Field(() => String)
   @IsString()
   @Length(5)
@@ -18,5 +19,5 @@ export class Category {
   slug: string;
 
   @Field(() => [Restaurant])
-  restaurants: Restaurant[];
+  restaurants?: Restaurant[];
 }
