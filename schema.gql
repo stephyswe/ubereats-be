@@ -5,7 +5,8 @@
 type Category {
   coverImg: String
   name: String!
-  restaurants: [Restaurant!]!
+  restaurantCount: Int!
+  restaurants: [Restaurant!]
   slug: String!
 }
 
@@ -55,6 +56,12 @@ type EditProfileOutput {
   ok: Boolean!
 }
 
+type FindManyCategoriesOutput {
+  categories: [Category!]
+  error: String
+  ok: Boolean!
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -77,6 +84,7 @@ type Mutation {
 }
 
 type Query {
+  findManyCategories: FindManyCategoriesOutput!
   me: User!
   restaurants: [Restaurant!]!
   userProfile(userId: Float!): UserProfileOutput!

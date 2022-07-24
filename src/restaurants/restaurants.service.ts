@@ -7,7 +7,9 @@ import {
   DeleteRestaurantInput,
   DeleteRestaurantOutput,
 } from './dtos/delete-restaurant.dto';
+import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
+import { Category } from './models/category.model';
 
 @Injectable()
 export class RestaurantService {
@@ -125,6 +127,27 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not delete restaurant.',
+      };
+    }
+  }
+
+  countRestaurants(category: Category) {
+    return this.prisma.restaurant.count({
+      where: { categoryId: category.id },
+    });
+  }
+
+  async findManyCategories(): Promise<FindManyCategoriesOutput> {
+    try {
+      const categories = await this.prisma.category.findMany();
+      return {
+        ok: true,
+        categories,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load categories',
       };
     }
   }
