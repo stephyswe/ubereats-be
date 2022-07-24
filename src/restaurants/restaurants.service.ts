@@ -8,6 +8,7 @@ import {
   DeleteRestaurantOutput,
 } from './dtos/delete-restaurant.dto';
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
+import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
 import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
 import { Category } from './models/category.model';
 
@@ -148,6 +149,48 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not load categories',
+      };
+    }
+  }
+
+  async findCategoryBySlug({
+    slug,
+  }: //page,
+  CategoryInput): Promise<CategoryOutput> {
+    try {
+      const category = await this.prisma.category.findFirst({
+        where: { slug: slug },
+        include: {
+          restaurants: true,
+        },
+      });
+      if (!category) {
+        return {
+          ok: false,
+          error: 'Category not found',
+        };
+      }
+      /* const restaurants = await this.restaurants.find({
+        where: {
+          category,
+        },
+        order: {
+          isPromoted: 'DESC',
+        },
+        take: 25,
+        skip: (page - 1) * 25,
+      }); */
+      //const totalResults = await this.countRestaurants(category);
+      return {
+        ok: true,
+        //restaurants,
+        category,
+        //totalPages: Math.ceil(totalResults / 25),
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load category',
       };
     }
   }
