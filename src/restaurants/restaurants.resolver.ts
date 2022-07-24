@@ -7,6 +7,10 @@ import {
   CreateRestaurantInputArgs,
   CreateRestaurantOutput,
 } from './dtos/create-restaurant.dto';
+import {
+  UpdateRestaurantInputArgs,
+  UpdateRestaurantOutput,
+} from './dtos/update-restaurant.dto';
 import { Restaurant } from './models/restaurant.model';
 import { RestaurantService } from './restaurants.service';
 
@@ -22,20 +26,17 @@ export class RestaurantResolver {
   @Mutation(() => CreateRestaurantOutput)
   @Role(['Owner'])
   async createRestaurant(
-    @CurrentUser() authUser: User,
+    @CurrentUser() owner: User,
     @Args('createRestaurantDto') args: CreateRestaurantInputArgs,
   ): Promise<CreateRestaurantOutput> {
-    return this.restaurantService.create(authUser, args);
+    return this.restaurantService.create(owner, args);
   }
-  /* 
-  @Mutation(() => Boolean)
-  async updateRestaurant(@Args('input') args: UpdateRestaurantInput) {
-    try {
-      await this.restaurantService.update(args);
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  } */
+
+  @Mutation(() => UpdateRestaurantOutput)
+  async updateRestaurant(
+    @CurrentUser() owner: User,
+    @Args('input') args: UpdateRestaurantInputArgs,
+  ): Promise<UpdateRestaurantOutput> {
+    return this.restaurantService.update(owner, args);
+  }
 }

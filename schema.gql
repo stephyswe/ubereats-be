@@ -62,6 +62,7 @@ type Mutation {
   createRestaurant(createRestaurantDto: CreateRestaurantInputArgs!): CreateRestaurantOutput!
   editProfile(input: EditProfileInputArgs!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
+  updateRestaurant(input: UpdateRestaurantInputArgs!): UpdateRestaurantOutput!
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
 
@@ -78,6 +79,19 @@ type Restaurant {
   id: Float!
   name: String!
   owner: User
+}
+
+input UpdateRestaurantInputArgs {
+  address: String
+  categoryName: String
+  coverImg: String
+  name: String
+  restaurantId: Float!
+}
+
+type UpdateRestaurantOutput {
+  error: String
+  ok: Boolean!
 }
 
 type User {
