@@ -9,6 +9,7 @@ import {
 } from './dtos/delete-restaurant.dto';
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
+import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurants.dto';
 import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
 import { Category } from './models/category.model';
 
@@ -16,8 +17,26 @@ import { Category } from './models/category.model';
 export class RestaurantService {
   constructor(private prisma: PrismaService) {}
 
-  findMany() {
-    return this.prisma.restaurant.findMany();
+  async findMany({ page }: RestaurantInput): Promise<RestaurantOutput> {
+    try {
+      const totalResults = await this.prisma.restaurant.count();
+      const restaurants = await this.prisma.restaurant.findMany({
+        skip: (page - 1) * 25,
+        take: 25,
+      });
+
+      return {
+        ok: true,
+        results: restaurants,
+        totalPages: Math.ceil(totalResults / 3),
+        totalResults,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load restaurants',
+      };
+    }
   }
 
   async categoryFindOrCreate(name: string) {
@@ -155,8 +174,8 @@ export class RestaurantService {
 
   async findCategoryBySlug({
     slug,
-  }: //page,
-  CategoryInput): Promise<CategoryOutput> {
+    page,
+  }: CategoryInput): Promise<CategoryOutput> {
     try {
       const category = await this.prisma.category.findFirst({
         where: { slug: slug },
@@ -170,22 +189,20 @@ export class RestaurantService {
           error: 'Category not found',
         };
       }
-      /* const restaurants = await this.restaurants.find({
+      const restaurants = await this.prisma.restaurant.findMany({
         where: {
-          category,
-        },
-        order: {
-          isPromoted: 'DESC',
+          categoryId: category.id,
         },
         take: 25,
         skip: (page - 1) * 25,
-      }); */
-      //const totalResults = await this.countRestaurants(category);
+      });
+      const totalResults = await this.countRestaurants(category);
       return {
         ok: true,
-        //restaurants,
+        restaurants,
         category,
-        //totalPages: Math.ceil(totalResults / 25),
+        totalPages: Math.ceil(totalResults / 25),
+        totalResults,
       };
     } catch {
       return {

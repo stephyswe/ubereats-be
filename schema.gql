@@ -3,14 +3,15 @@
 # ------------------------------------------------------
 
 type Category {
+  countRestaurants: Int!
   coverImg: String
   name: String!
-  restaurantCount: Int!
   restaurants: [Restaurant!]
   slug: String!
 }
 
 input CategoryInput {
+  page: Int = 1
   slug: String!
 }
 
@@ -18,6 +19,9 @@ type CategoryOutput {
   category: Category
   error: String
   ok: Boolean!
+  restaurants: [Restaurant!]
+  totalPages: Int
+  totalResults: Int
 }
 
 input CreateAccountInput {
@@ -94,10 +98,10 @@ type Mutation {
 }
 
 type Query {
-  category(input: CategoryInput!): CategoryOutput!
+  findCategoryBySlug(input: CategoryInput!): CategoryOutput!
   findManyCategories: FindManyCategoriesOutput!
+  findManyRestaurants(input: RestaurantInput!): RestaurantOutput!
   me: User!
-  restaurants: [Restaurant!]!
   userProfile(userId: Float!): UserProfileOutput!
 }
 
@@ -108,6 +112,18 @@ type Restaurant {
   id: Float!
   name: String!
   owner: User
+}
+
+input RestaurantInput {
+  page: Int = 1
+}
+
+type RestaurantOutput {
+  error: String
+  ok: Boolean!
+  results: [Restaurant!]
+  totalPages: Int
+  totalResults: Int
 }
 
 input UpdateRestaurantInputArgs {

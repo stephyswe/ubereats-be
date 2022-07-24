@@ -21,6 +21,7 @@ import {
 } from './dtos/delete-restaurant.dto';
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
+import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurants.dto';
 import {
   UpdateRestaurantInputArgs,
   UpdateRestaurantOutput,
@@ -33,9 +34,11 @@ import { RestaurantService } from './restaurants.service';
 export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
-  @Query(() => [Restaurant])
-  restaurants() {
-    return this.restaurantService.findMany();
+  @Query(() => RestaurantOutput)
+  findManyRestaurants(
+    @Args('input') restaurantInput: RestaurantInput,
+  ): Promise<RestaurantOutput> {
+    return this.restaurantService.findMany(restaurantInput);
   }
 
   @Mutation(() => CreateRestaurantOutput)
@@ -71,7 +74,7 @@ export class CategoryResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
   @ResolveField(() => Int)
-  restaurantCount(@Parent() category: Category): Promise<number> {
+  countRestaurants(@Parent() category: Category): Promise<number> {
     return this.restaurantService.countRestaurants(category);
   }
 
@@ -81,7 +84,7 @@ export class CategoryResolver {
   }
 
   @Query(() => CategoryOutput)
-  category(
+  findCategoryBySlug(
     @Args('input') categoryInput: CategoryInput,
   ): Promise<CategoryOutput> {
     return this.restaurantService.findCategoryBySlug(categoryInput);
