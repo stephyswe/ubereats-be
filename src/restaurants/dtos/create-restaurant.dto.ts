@@ -1,20 +1,16 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { Prisma } from '@prisma/client';
+import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
+import { CoreOutput } from '../../common/dtos/output.dto';
+import { Restaurant } from '../models/restaurant.model';
 
 @InputType()
-export class CreateRestaurantInputType {
-  @Field(() => String)
-  name: string | undefined;
-
-  @Field(() => String)
-  address: string;
-
+export class CreateRestaurantInputArgs extends PickType(Restaurant, [
+  'name',
+  'coverImg',
+  'address',
+]) {
   @Field(() => String)
   categoryName: string;
 }
 
-@InputType()
-export class CreateRestaurantInput {
-  @Field(() => CreateRestaurantInputType)
-  data: Prisma.RestaurantCreateInput;
-}
+@ObjectType()
+export class CreateRestaurantOutput extends CoreOutput {}

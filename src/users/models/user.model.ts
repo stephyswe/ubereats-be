@@ -1,12 +1,7 @@
-import {
-  Field,
-  InputType,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
-
-import { CoreEntity } from '../../common/models/core.model';
+import { CoreInputId } from '../../common/dtos/output.dto';
+import { Restaurant } from '../../restaurants/models/restaurant.model';
 
 export enum UserRole {
   Client,
@@ -16,9 +11,8 @@ export enum UserRole {
 
 registerEnumType(UserRole, { name: 'UserRole' });
 
-@InputType({ isAbstract: true })
 @ObjectType()
-export class User extends CoreEntity {
+export class User extends CoreInputId {
   @Field(() => String)
   @IsEmail()
   email: string;
@@ -31,4 +25,7 @@ export class User extends CoreEntity {
 
   @Field(() => Boolean)
   verified?: boolean;
+
+  @Field(() => [Restaurant])
+  restaurants: Restaurant[];
 }

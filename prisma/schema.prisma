@@ -11,9 +11,14 @@ datasource db {
 }
 
 model Restaurant {
-  id      Int    @id @default(autoincrement())
-  name    String
-  address String
+  id         Int      @id @default(autoincrement())
+  name       String
+  coverImg   String?
+  address    String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int      @unique // relation scalar field (used in the `@relation` attribute above) @unique
+  owner      User     @relation(fields: [userId], references: [id])
+  userId     Int      @unique // relation scalar field (used in the `@relation` attribute above) @unique
 }
 
 model User {
@@ -21,10 +26,11 @@ model User {
   email        String
   password     String
   role         UserRole      @default(Client)
-  verified     Boolean?       @default(false)
+  verified     Boolean?      @default(false)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
   Verification Verification?
+  restaurants  Restaurant[]
 }
 
 enum UserRole {
@@ -38,4 +44,12 @@ model Verification {
   code   String
   user   User   @relation(fields: [userId], references: [id])
   userId Int    @unique // relation scalar field (used in the `@relation` attribute above) @unique
+}
+
+model Category {
+  id          Int          @id @default(autoincrement())
+  name        String
+  coverImg    String?
+  slug        String       @unique
+  restaurants Restaurant[]
 }
