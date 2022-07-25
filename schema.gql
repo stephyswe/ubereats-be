@@ -100,8 +100,10 @@ type Mutation {
 type Query {
   findCategoryBySlug(input: CategoryInput!): CategoryOutput!
   findManyCategories: FindManyCategoriesOutput!
-  findManyRestaurants(input: RestaurantInput!): RestaurantOutput!
+  findManyRestaurants(input: RestaurantsInput!): RestaurantsOutput!
+  findRestaurant(input: RestaurantInput!): RestaurantOutput!
   me: User!
+  searchRestaurant(input: SearchRestaurantInput!): SearchRestaurantOutput!
   userProfile(userId: Float!): UserProfileOutput!
 }
 
@@ -115,10 +117,33 @@ type Restaurant {
 }
 
 input RestaurantInput {
-  page: Int = 1
+  restaurantId: Int!
 }
 
 type RestaurantOutput {
+  error: String
+  ok: Boolean!
+  results: Restaurant
+}
+
+input RestaurantsInput {
+  page: Int = 1
+}
+
+type RestaurantsOutput {
+  error: String
+  ok: Boolean!
+  results: [Restaurant!]
+  totalPages: Int
+  totalResults: Int
+}
+
+input SearchRestaurantInput {
+  page: Int = 1
+  query: String!
+}
+
+type SearchRestaurantOutput {
   error: String
   ok: Boolean!
   results: [Restaurant!]

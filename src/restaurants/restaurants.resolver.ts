@@ -21,7 +21,15 @@ import {
 } from './dtos/delete-restaurant.dto';
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
-import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurants.dto';
+import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurant.dto';
+import {
+  RestaurantsInput,
+  RestaurantsOutput,
+} from './dtos/find-restaurants.dto';
+import {
+  SearchRestaurantInput,
+  SearchRestaurantOutput,
+} from './dtos/search-restaurant.dto';
 import {
   UpdateRestaurantInputArgs,
   UpdateRestaurantOutput,
@@ -34,11 +42,25 @@ import { RestaurantService } from './restaurants.service';
 export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
-  @Query(() => RestaurantOutput)
+  @Query(() => RestaurantsOutput)
   findManyRestaurants(
+    @Args('input') restaurantInput: RestaurantsInput,
+  ): Promise<RestaurantsOutput> {
+    return this.restaurantService.findMany(restaurantInput);
+  }
+
+  @Query(() => RestaurantOutput)
+  findRestaurant(
     @Args('input') restaurantInput: RestaurantInput,
   ): Promise<RestaurantOutput> {
-    return this.restaurantService.findMany(restaurantInput);
+    return this.restaurantService.find(restaurantInput);
+  }
+
+  @Query(() => SearchRestaurantOutput)
+  searchRestaurant(
+    @Args('input') searchRestaurantInput: SearchRestaurantInput,
+  ): Promise<SearchRestaurantOutput> {
+    return this.restaurantService.searchByName(searchRestaurantInput);
   }
 
   @Mutation(() => CreateRestaurantOutput)
