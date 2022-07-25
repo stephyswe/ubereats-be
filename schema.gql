@@ -39,6 +39,20 @@ type CreateAccountOutput {
   ok: Boolean!
 }
 
+input CreateDishInput {
+  description: String
+  name: String!
+  options: [DishOptionInputType!]
+  price: Int
+  restaurantId: Int!
+}
+
+type CreateDishOutput {
+  dish: Dish!
+  error: String
+  ok: Boolean!
+}
+
 input CreateRestaurantInputArgs {
   address: String!
   categoryName: String!
@@ -63,8 +77,32 @@ type DeleteRestaurantOutput {
 type Dish {
   description: String
   name: String!
+  options: [DishOption!]
   photo: String
   price: Int
+  restaurant: Restaurant
+}
+
+type DishChoice {
+  extra: Int
+  name: String!
+}
+
+input DishChoiceInputType {
+  extra: Int
+  name: String!
+}
+
+type DishOption {
+  choices: [DishChoice!]
+  extra: Int
+  name: String!
+}
+
+input DishOptionInputType {
+  choices: [DishChoiceInputType!]
+  extra: Int
+  name: String!
 }
 
 input EditProfileInputArgs {
@@ -85,8 +123,8 @@ type FindManyCategoriesOutput {
 
 type FindManyDishesOutput {
   error: String
-  menu: [Dish!]
   ok: Boolean!
+  results: [Dish!]!
 }
 
 input LoginInput {
@@ -102,6 +140,7 @@ type LoginOutput {
 
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
+  createDish(input: CreateDishInput!): CreateDishOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInputArgs!): CreateRestaurantOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   editProfile(input: EditProfileInputArgs!): EditProfileOutput!
@@ -126,6 +165,7 @@ type Restaurant {
   category: Category
   coverImg: String
   id: Float!
+  menu: [Dish!]!
   name: String!
   owner: User
 }

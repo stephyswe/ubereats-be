@@ -1,9 +1,10 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
-import { IsString, Length } from 'class-validator';
+import { IsInt, IsString, Length } from 'class-validator';
+import { Restaurant } from './restaurant.model';
 
 import { CoreInputId } from './../../common/dtos/output.dto';
 
-@InputType({ isAbstract: true })
+@InputType('DishInputType', { isAbstract: true })
 @ObjectType()
 export class Dish extends CoreInputId {
   @Field(() => String)
@@ -12,7 +13,7 @@ export class Dish extends CoreInputId {
   name: string;
 
   @Field(() => Int, { nullable: true })
-  @IsString()
+  @IsInt()
   price: number;
 
   @Field(() => String)
@@ -22,4 +23,32 @@ export class Dish extends CoreInputId {
   @Field(() => String)
   @Length(5, 140)
   description?: string;
+
+  @Field(() => Restaurant)
+  restaurant?: Restaurant;
+
+  @Field(() => [DishOption], { nullable: true })
+  options?: DishOption[];
+}
+
+@InputType('DishOptionInputType', { isAbstract: true })
+@ObjectType()
+class DishOption {
+  @Field(() => String)
+  name: string;
+
+  @Field(() => Int)
+  extra?: number;
+
+  @Field(() => [DishChoice])
+  choices?: DishChoice[];
+}
+
+@InputType('DishChoiceInputType', { isAbstract: true })
+@ObjectType()
+export class DishChoice {
+  @Field(() => String)
+  name: string;
+  @Field(() => Int, { nullable: true })
+  extra?: number;
 }

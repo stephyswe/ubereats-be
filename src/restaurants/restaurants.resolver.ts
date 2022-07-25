@@ -11,6 +11,7 @@ import {
 import { CurrentUser } from '../auth/auth-user.decorator';
 import { Role } from '../auth/role.decorator';
 import { User } from '../users/models/user.model';
+import { CreateDishInput, CreateDishOutput } from './dtos/create-dish.dto';
 import {
   CreateRestaurantInputArgs,
   CreateRestaurantOutput,
@@ -45,23 +46,17 @@ export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
   @Query(() => RestaurantsOutput)
-  findManyRestaurants(
-    @Args('input') args: RestaurantsInput,
-  ): Promise<RestaurantsOutput> {
+  findManyRestaurants(@Args('input') args: RestaurantsInput) {
     return this.restaurantService.findMany(args);
   }
 
   @Query(() => RestaurantOutput)
-  findRestaurant(
-    @Args('input') args: RestaurantInput,
-  ): Promise<RestaurantOutput> {
+  findRestaurant(@Args('input') args: RestaurantInput) {
     return this.restaurantService.find(args);
   }
 
   @Query(() => SearchRestaurantOutput)
-  searchRestaurant(
-    @Args('input') args: SearchRestaurantInput,
-  ): Promise<SearchRestaurantOutput> {
+  searchRestaurant(@Args('input') args: SearchRestaurantInput) {
     return this.restaurantService.searchByName(args);
   }
 
@@ -108,9 +103,7 @@ export class CategoryResolver {
   }
 
   @Query(() => CategoryOutput)
-  findCategoryBySlug(
-    @Args('input') categoryInput: CategoryInput,
-  ): Promise<CategoryOutput> {
+  findCategoryBySlug(@Args('input') categoryInput: CategoryInput) {
     return this.restaurantService.findCategoryBySlug(categoryInput);
   }
 }
@@ -119,8 +112,16 @@ export class CategoryResolver {
 export class DishResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
+  @Mutation(() => CreateDishOutput)
+  createDish(
+    @CurrentUser() owner: User,
+    @Args('input') createDishInput: CreateDishInput,
+  ) {
+    return this.restaurantService.createDish(owner, createDishInput);
+  }
+
   @Query(() => FindManyDishesOutput)
-  findManyDishes(): Promise<FindManyDishesOutput> {
+  findManyDishes() {
     return this.restaurantService.findManyDishes();
   }
 }
