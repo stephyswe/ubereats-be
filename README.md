@@ -26,9 +26,9 @@
 * See Restaurant
 * Search Restaurant
 
-- Create Dish
-- Edit Dish
-- Delete Dish
+* Create Dish
+* Edit Dish
+* Delete Dish
 
 ## Description
 

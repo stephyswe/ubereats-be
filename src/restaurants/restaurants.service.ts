@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRestaurantInputArgs } from './dtos/create-restaurant.dto';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { User } from '../users/models/user.model';
+import { CreateRestaurantInput } from './dtos/create-restaurant.dto';
 import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
 import {
   DeleteRestaurantInput,
@@ -13,7 +13,8 @@ import { CategoryInput } from './dtos/find-category.dto';
 import { RestaurantInput } from './dtos/find-restaurant.dto';
 import { RestaurantsInput } from './dtos/find-restaurants.dto';
 import { SearchRestaurantInput } from './dtos/search-restaurant.dto';
-import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
+import { EditDishInput } from './dtos/update-dish.dto';
+import { UpdateRestaurantInput } from './dtos/update-restaurant.dto';
 import { Category } from './models/category.model';
 
 @Injectable()
@@ -75,7 +76,7 @@ export class RestaurantService {
     }
   }
 
-  async create(owner: User, createRestaurantInput: CreateRestaurantInputArgs) {
+  async create(owner: User, createRestaurantInput: CreateRestaurantInput) {
     try {
       const category = await this.categoryFindOrCreate(
         createRestaurantInput.categoryName,
@@ -101,8 +102,9 @@ export class RestaurantService {
     }
   }
 
-  async update(owner: User, params: UpdateRestaurantInputArgs) {
+  async update(owner: User, params: UpdateRestaurantInput) {
     try {
+      console.log('hi 1', params);
       const id = params.restaurantId;
       const categoryName = params.categoryName;
       let category = null;
@@ -287,6 +289,49 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not create dish',
+      };
+    }
+  }
+
+  async updateDish(owner: User, editDishInput: EditDishInput) {
+    try {
+      const id = editDishInput.dishId;
+      const newOptions = editDishInput.options;
+
+      delete editDishInput.dishId;
+
+      const dish = await this.prisma.dish.findUnique({
+        where: { id },
+        include: { restaurant: true },
+      });
+      if (!dish) {
+        return {
+          ok: false,
+          error: 'Dish not found',
+        };
+      }
+      if (dish.restaurant.userId !== owner.id) {
+        return {
+          ok: false,
+          error: "You can't do that.",
+        };
+      }
+
+      await this.prisma.dish.update({
+        where: { id },
+        data: {
+          name: 'name',
+          options: editDishInput.options as string,
+        },
+      });
+
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not update dish',
       };
     }
   }
