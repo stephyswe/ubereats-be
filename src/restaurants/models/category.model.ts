@@ -1,8 +1,9 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
 import { CoreInputId } from './../../common/dtos/output.dto';
 import { Restaurant } from './restaurant.model';
 
+@InputType({ isAbstract: true })
 @ObjectType()
 export class Category extends CoreInputId {
   @Field(() => String)

@@ -19,6 +19,7 @@ model Restaurant {
   categoryId Int // relation scalar field (used in the `@relation` attribute above) @unique
   owner      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int // relation scalar field (used in the `@relation` attribute above) @unique
+  menu       Dish[]
 }
 
 model User {
@@ -52,4 +53,14 @@ model Category {
   coverImg    String?
   slug        String       @unique
   restaurants Restaurant[]
+}
+
+model Dish {
+  id           Int        @id @default(autoincrement())
+  name         String
+  price        Int
+  photo        String?
+  description  String
+  Restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurantId Int
 }

@@ -254,4 +254,9 @@ export class RestaurantService {
     }
     return category;
   }
+
+  async findManyDishes() {
+    const menu = await this.prisma.dish.findMany();
+    return { ok: true, menu };
+  }
 }
