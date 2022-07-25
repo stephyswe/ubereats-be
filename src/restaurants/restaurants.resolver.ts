@@ -13,7 +13,7 @@ import { Role } from '../auth/role.decorator';
 import { User } from '../users/models/user.model';
 import { CreateDishInput, CreateDishOutput } from './dtos/create-dish.dto';
 import {
-  CreateRestaurantInputArgs,
+  CreateRestaurantInput,
   CreateRestaurantOutput,
 } from './dtos/create-restaurant.dto';
 import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
@@ -33,8 +33,9 @@ import {
   SearchRestaurantInput,
   SearchRestaurantOutput,
 } from './dtos/search-restaurant.dto';
+import { EditDishInput, EditDishOutput } from './dtos/update-dish.dto';
 import {
-  UpdateRestaurantInputArgs,
+  UpdateRestaurantInput,
   UpdateRestaurantOutput,
 } from './dtos/update-restaurant.dto';
 import { Category } from './models/category.model';
@@ -65,7 +66,7 @@ export class RestaurantResolver {
   @Role(['Owner'])
   async createRestaurant(
     @CurrentUser() owner: User,
-    @Args('createRestaurantDto') args: CreateRestaurantInputArgs,
+    @Args('createRestaurantDto') args: CreateRestaurantInput,
   ): Promise<CreateRestaurantOutput> {
     return this.restaurantService.create(owner, args);
   }
@@ -74,7 +75,7 @@ export class RestaurantResolver {
   @Role(['Owner'])
   async updateRestaurant(
     @CurrentUser() owner: User,
-    @Args('input') args: UpdateRestaurantInputArgs,
+    @Args('input') args: UpdateRestaurantInput,
   ): Promise<UpdateRestaurantOutput> {
     return this.restaurantService.update(owner, args);
   }
@@ -124,6 +125,15 @@ export class DishResolver {
     @Args('input') createDishInput: CreateDishInput,
   ) {
     return this.restaurantService.createDish(owner, createDishInput);
+  }
+
+  @Mutation(() => EditDishOutput)
+  @Role(['Owner'])
+  updateDish(
+    @CurrentUser() owner: User,
+    @Args('input') editDishInput: EditDishInput,
+  ) {
+    return this.restaurantService.updateDish(owner, editDishInput);
   }
 
   @Mutation(() => DeleteDishOutput)

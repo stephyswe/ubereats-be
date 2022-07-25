@@ -28,12 +28,12 @@ export class Dish extends CoreInputId {
   restaurant?: Restaurant;
 
   @Field(() => [DishOption], { nullable: true })
-  options?: DishOption[];
+  options?: DishOption[] | string;
 }
 
 @InputType('DishOptionInputType', { isAbstract: true })
 @ObjectType()
-class DishOption {
+export class DishOption {
   @Field(() => String)
   name: string;
 

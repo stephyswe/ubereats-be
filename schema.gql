@@ -53,7 +53,7 @@ type CreateDishOutput {
   ok: Boolean!
 }
 
-input CreateRestaurantInputArgs {
+input CreateRestaurantInput {
   address: String!
   categoryName: String!
   coverImg: String
@@ -114,6 +114,20 @@ input DishOptionInputType {
   name: String!
 }
 
+input EditDishInput {
+  description: String
+  dishId: Float!
+  name: String
+  options: [DishOptionInputType!]
+  photo: String
+  price: Int
+}
+
+type EditDishOutput {
+  error: String
+  ok: Boolean!
+}
+
 input EditProfileInputArgs {
   email: String!
   verified: Boolean
@@ -150,12 +164,13 @@ type LoginOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
-  createRestaurant(createRestaurantDto: CreateRestaurantInputArgs!): CreateRestaurantOutput!
+  createRestaurant(createRestaurantDto: CreateRestaurantInput!): CreateRestaurantOutput!
   deleteDish(input: DeleteDishInput!): DeleteDishOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   editProfile(input: EditProfileInputArgs!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
-  updateRestaurant(input: UpdateRestaurantInputArgs!): UpdateRestaurantOutput!
+  updateDish(input: EditDishInput!): EditDishOutput!
+  updateRestaurant(input: UpdateRestaurantInput!): UpdateRestaurantOutput!
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
 
@@ -215,7 +230,7 @@ type SearchRestaurantOutput {
   totalResults: Int
 }
 
-input UpdateRestaurantInputArgs {
+input UpdateRestaurantInput {
   address: String
   categoryName: String
   coverImg: String
