@@ -21,6 +21,7 @@ import {
 } from './dtos/delete-restaurant.dto';
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
+import { FindManyDishesOutput } from './dtos/find-dishes.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurant.dto';
 import {
   RestaurantsInput,
@@ -35,6 +36,7 @@ import {
   UpdateRestaurantOutput,
 } from './dtos/update-restaurant.dto';
 import { Category } from './models/category.model';
+import { Dish } from './models/dish.model';
 import { Restaurant } from './models/restaurant.model';
 import { RestaurantService } from './restaurants.service';
 
@@ -110,5 +112,15 @@ export class CategoryResolver {
     @Args('input') categoryInput: CategoryInput,
   ): Promise<CategoryOutput> {
     return this.restaurantService.findCategoryBySlug(categoryInput);
+  }
+}
+
+@Resolver(() => Dish)
+export class DishResolver {
+  constructor(private readonly restaurantService: RestaurantService) {}
+
+  @Query(() => FindManyDishesOutput)
+  findManyDishes(): Promise<FindManyDishesOutput> {
+    return this.restaurantService.findManyDishes();
   }
 }

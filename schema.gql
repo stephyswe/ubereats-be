@@ -60,6 +60,13 @@ type DeleteRestaurantOutput {
   ok: Boolean!
 }
 
+type Dish {
+  description: String
+  name: String!
+  photo: String
+  price: Int
+}
+
 input EditProfileInputArgs {
   email: String!
   verified: Boolean
@@ -73,6 +80,12 @@ type EditProfileOutput {
 type FindManyCategoriesOutput {
   categories: [Category!]
   error: String
+  ok: Boolean!
+}
+
+type FindManyDishesOutput {
+  error: String
+  menu: [Dish!]
   ok: Boolean!
 }
 
@@ -100,6 +113,7 @@ type Mutation {
 type Query {
   findCategoryBySlug(input: CategoryInput!): CategoryOutput!
   findManyCategories: FindManyCategoriesOutput!
+  findManyDishes: FindManyDishesOutput!
   findManyRestaurants(input: RestaurantsInput!): RestaurantsOutput!
   findRestaurant(input: RestaurantInput!): RestaurantOutput!
   me: User!
