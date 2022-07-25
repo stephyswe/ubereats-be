@@ -3,6 +3,7 @@ import { CreateRestaurantInputArgs } from './dtos/create-restaurant.dto';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { User } from '../users/models/user.model';
+import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
 import {
   DeleteRestaurantInput,
   DeleteRestaurantOutput,
@@ -242,7 +243,11 @@ export class RestaurantService {
   }
 
   async findManyDishes() {
-    const results = await this.prisma.dish.findMany();
+    const results = await this.prisma.dish.findMany({
+      include: {
+        restaurant: true,
+      },
+    });
 
     return { ok: true, results };
   }
@@ -269,6 +274,9 @@ export class RestaurantService {
           ...createDishInput,
           restaurantId: restaurant.id,
         },
+        include: {
+          restaurant: true,
+        },
       });
 
       return {
@@ -279,6 +287,39 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not create dish',
+      };
+    }
+  }
+
+  async deleteDish(
+    owner: User,
+    { dishId }: DeleteDishInput,
+  ): Promise<DeleteDishOutput> {
+    try {
+      const dish = await this.prisma.dish.findUnique({
+        where: { id: dishId },
+        include: { restaurant: true },
+      });
+      if (!dish) {
+        return {
+          ok: false,
+          error: 'Dish not found',
+        };
+      }
+      if (dish.restaurant.userId !== owner.id) {
+        return {
+          ok: false,
+          error: "You can't delete a dish without rights.",
+        };
+      }
+      await this.prisma.dish.delete({ where: { id: dishId } });
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not delete dish',
       };
     }
   }

@@ -65,6 +65,15 @@ type CreateRestaurantOutput {
   ok: Boolean!
 }
 
+input DeleteDishInput {
+  dishId: Int!
+}
+
+type DeleteDishOutput {
+  error: String
+  ok: Boolean!
+}
+
 input DeleteRestaurantInput {
   restaurantId: Float!
 }
@@ -142,6 +151,7 @@ type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInputArgs!): CreateRestaurantOutput!
+  deleteDish(input: DeleteDishInput!): DeleteDishOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   editProfile(input: EditProfileInputArgs!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
