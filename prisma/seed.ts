@@ -18,13 +18,38 @@ async function main() {
     });
     console.log(`Created user with id: ${user.id}`);
 
-    await prisma.verification.create({
+    const verification = await prisma.verification.create({
       data: {
         code: 'b22ed89a-6ba8-4e5d-8a57-2a2d19dd2ae4',
         userId: user.id,
       },
     });
+    console.log(`Created verification with id: ${verification.id}`);
+
+    const category = await prisma.category.create({
+      data: {
+        name: 'korean bbq',
+        coverImg: null,
+        slug: 'korean-bbq',
+      },
+    });
+
+    console.log(`Created category with id: ${category.id}`);
+
+    // one restaurant by user
+    const restaurant = await prisma.restaurant.create({
+      data: {
+        name: 'BBQ House',
+        coverImg: 'https://',
+        address: '123 Altavista',
+        categoryId: category.id,
+        userId: user.id,
+      },
+    });
+
+    console.log(`Created restaurant with id: ${restaurant.id}`);
   }
+
   console.log(`Seeding finished.`);
 }
 

@@ -1,5 +1,5 @@
 {
-  "name": "02-graphql-code-first-init",
+  "name": "nuber-be-gql",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -17,7 +17,8 @@
     "prisma:generate": "dotenv -e .env.dev -- prisma generate --watch",
     "prisma:studio": "dotenv -e .env.dev -- prisma studio",
     "prisma:migrate": "dotenv -e .env.dev -- npx prisma migrate dev --name init",
-    "prisma:seed": "dotenv -e .env.dev -- npx prisma db seed",
+    "prisma:seed": "dotenv -e .env.dev -- npx prisma db seed --reset",
+    "prisma:reset": "dotenv -e .env.dev -- npx prisma migrate reset",
     "start:dev": "rimraf dist && cross-env NODE_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
