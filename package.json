@@ -5,6 +5,9 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -14,6 +17,7 @@
     "prisma:generate": "dotenv -e .env.dev -- prisma generate --watch",
     "prisma:studio": "dotenv -e .env.dev -- prisma studio",
     "prisma:migrate": "dotenv -e .env.dev -- npx prisma migrate dev --name init",
+    "prisma:seed": "dotenv -e .env.dev -- npx prisma db seed",
     "start:dev": "rimraf dist && cross-env NODE_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
