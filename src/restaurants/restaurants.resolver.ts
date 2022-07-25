@@ -16,6 +16,7 @@ import {
   CreateRestaurantInputArgs,
   CreateRestaurantOutput,
 } from './dtos/create-restaurant.dto';
+import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
 import {
   DeleteRestaurantInput,
   DeleteRestaurantOutput,
@@ -112,6 +113,11 @@ export class CategoryResolver {
 export class DishResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
+  @Query(() => FindManyDishesOutput)
+  findManyDishes() {
+    return this.restaurantService.findManyDishes();
+  }
+
   @Mutation(() => CreateDishOutput)
   createDish(
     @CurrentUser() owner: User,
@@ -120,8 +126,12 @@ export class DishResolver {
     return this.restaurantService.createDish(owner, createDishInput);
   }
 
-  @Query(() => FindManyDishesOutput)
-  findManyDishes() {
-    return this.restaurantService.findManyDishes();
+  @Mutation(() => DeleteDishOutput)
+  @Role(['Owner'])
+  deleteDish(
+    @CurrentUser() owner: User,
+    @Args('input') deleteDishInput: DeleteDishInput,
+  ): Promise<DeleteDishOutput> {
+    return this.restaurantService.deleteDish(owner, deleteDishInput);
   }
 }
