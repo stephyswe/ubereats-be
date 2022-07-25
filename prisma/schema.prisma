@@ -60,7 +60,8 @@ model Dish {
   name         String
   price        Int
   photo        String?
-  description  String
+  description  String?
   Restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId Int
+  options      Json?
 }

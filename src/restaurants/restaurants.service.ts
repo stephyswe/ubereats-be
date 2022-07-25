@@ -8,16 +8,10 @@ import {
   DeleteRestaurantOutput,
 } from './dtos/delete-restaurant.dto';
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
-import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
-import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurant.dto';
-import {
-  RestaurantsInput,
-  RestaurantsOutput,
-} from './dtos/find-restaurants.dto';
-import {
-  SearchRestaurantInput,
-  SearchRestaurantOutput,
-} from './dtos/search-restaurant.dto';
+import { CategoryInput } from './dtos/find-category.dto';
+import { RestaurantInput } from './dtos/find-restaurant.dto';
+import { RestaurantsInput } from './dtos/find-restaurants.dto';
+import { SearchRestaurantInput } from './dtos/search-restaurant.dto';
 import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
 import { Category } from './models/category.model';
 
@@ -25,7 +19,7 @@ import { Category } from './models/category.model';
 export class RestaurantService {
   constructor(private prisma: PrismaService) {}
 
-  async findMany({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
+  async findMany({ page }: RestaurantsInput) {
     try {
       const totalResults = await this.prisma.restaurant.count();
       const restaurants = await this.prisma.restaurant.findMany({
@@ -47,10 +41,11 @@ export class RestaurantService {
     }
   }
 
-  async find({ restaurantId }: RestaurantInput): Promise<RestaurantOutput> {
+  async find({ restaurantId }: RestaurantInput) {
     try {
       const restaurant = await this.prisma.restaurant.findUnique({
         where: { id: restaurantId },
+        include: { menu: true },
       });
       if (!restaurant) throw new Error('Restaurant not found');
       return { ok: true, results: restaurant };
@@ -59,13 +54,10 @@ export class RestaurantService {
     }
   }
 
-  async searchByName({
-    query,
-    page,
-  }: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
+  async searchByName({ query, page }: SearchRestaurantInput) {
     try {
       const totalResults = await this.prisma.restaurant.count();
-      const restaurants = await this.prisma.restaurant.findMany({
+      const results = await this.prisma.restaurant.findMany({
         skip: (page - 1) * 25,
         take: 25,
         where: { name: { contains: query, mode: 'insensitive' } },
@@ -73,7 +65,7 @@ export class RestaurantService {
 
       return {
         ok: true,
-        results: restaurants,
+        results,
         totalResults,
         totalPages: Math.ceil(totalResults / 25),
       };
@@ -201,16 +193,10 @@ export class RestaurantService {
     }
   }
 
-  async findCategoryBySlug({
-    slug,
-    page,
-  }: CategoryInput): Promise<CategoryOutput> {
+  async findCategoryBySlug({ slug, page }: CategoryInput) {
     try {
       const category = await this.prisma.category.findFirst({
         where: { slug: slug },
-        include: {
-          restaurants: true,
-        },
       });
       if (!category) {
         return {
@@ -256,7 +242,44 @@ export class RestaurantService {
   }
 
   async findManyDishes() {
-    const menu = await this.prisma.dish.findMany();
-    return { ok: true, menu };
+    const results = await this.prisma.dish.findMany();
+
+    return { ok: true, results };
+  }
+
+  async createDish(owner: User, createDishInput) {
+    try {
+      const restaurant = await this.prisma.restaurant.findUnique({
+        where: { id: createDishInput.restaurantId },
+      });
+      if (!restaurant) {
+        return {
+          ok: false,
+          error: 'Restaurant not found',
+        };
+      }
+      if (owner.id !== restaurant.userId) {
+        return {
+          ok: false,
+          error: "You aren't the restaurant owner.",
+        };
+      }
+      const dish = await this.prisma.dish.create({
+        data: {
+          ...createDishInput,
+          restaurantId: restaurant.id,
+        },
+      });
+
+      return {
+        ok: true,
+        dish,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: 'Could not create dish',
+      };
+    }
   }
 }

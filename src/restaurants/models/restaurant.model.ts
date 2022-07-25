@@ -2,6 +2,7 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
 import { User } from '../../users/models/user.model';
 import { Category } from './category.model';
+import { Dish } from './dish.model';
 
 @InputType({ isAbstract: true })
 @ObjectType()
@@ -27,4 +28,7 @@ export class Restaurant {
 
   @Field(() => User, { nullable: true })
   owner?: User;
+
+  @Field(() => [Dish])
+  menu: Dish[];
 }

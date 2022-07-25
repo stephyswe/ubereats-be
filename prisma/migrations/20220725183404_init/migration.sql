@@ -53,6 +53,7 @@ CREATE TABLE "Dish" (
     "photo" TEXT,
     "description" TEXT NOT NULL,
     "restaurantId" INTEGER NOT NULL,
+    "options" JSONB,
 
     CONSTRAINT "Dish_pkey" PRIMARY KEY ("id")
 );
