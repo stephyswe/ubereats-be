@@ -44,23 +44,23 @@ export class RestaurantResolver {
 
   @Query(() => RestaurantsOutput)
   findManyRestaurants(
-    @Args('input') restaurantInput: RestaurantsInput,
+    @Args('input') args: RestaurantsInput,
   ): Promise<RestaurantsOutput> {
-    return this.restaurantService.findMany(restaurantInput);
+    return this.restaurantService.findMany(args);
   }
 
   @Query(() => RestaurantOutput)
   findRestaurant(
-    @Args('input') restaurantInput: RestaurantInput,
+    @Args('input') args: RestaurantInput,
   ): Promise<RestaurantOutput> {
-    return this.restaurantService.find(restaurantInput);
+    return this.restaurantService.find(args);
   }
 
   @Query(() => SearchRestaurantOutput)
   searchRestaurant(
-    @Args('input') searchRestaurantInput: SearchRestaurantInput,
+    @Args('input') args: SearchRestaurantInput,
   ): Promise<SearchRestaurantOutput> {
-    return this.restaurantService.searchByName(searchRestaurantInput);
+    return this.restaurantService.searchByName(args);
   }
 
   @Mutation(() => CreateRestaurantOutput)
