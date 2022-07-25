@@ -22,8 +22,9 @@
 
 * See Categories
 * See Restaurants by Category (pagination)
-- See Restaurants (pagination)
-- See Restaurant
+* See Restaurants (pagination)
+* See Restaurant
+* Search Restaurant
 
 - Create Dish
 - Edit Dish

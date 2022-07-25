@@ -7,13 +7,10 @@ import {
 } from './../../common/dtos/pagination.dto';
 
 @InputType()
-export class RestaurantInput extends PaginationInput {
-  /*   @Field(() => Int)
-    restaurantId: number; */
-}
+export class RestaurantsInput extends PaginationInput {}
 
 @ObjectType()
-export class RestaurantOutput extends PaginationOutput {
+export class RestaurantsOutput extends PaginationOutput {
   @Field(() => [Restaurant], { nullable: true })
   results?: Restaurant[];
 }

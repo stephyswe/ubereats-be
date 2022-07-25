@@ -9,7 +9,15 @@ import {
 } from './dtos/delete-restaurant.dto';
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
-import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurants.dto';
+import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurant.dto';
+import {
+  RestaurantsInput,
+  RestaurantsOutput,
+} from './dtos/find-restaurants.dto';
+import {
+  SearchRestaurantInput,
+  SearchRestaurantOutput,
+} from './dtos/search-restaurant.dto';
 import { UpdateRestaurantInputArgs } from './dtos/update-restaurant.dto';
 import { Category } from './models/category.model';
 
@@ -17,7 +25,7 @@ import { Category } from './models/category.model';
 export class RestaurantService {
   constructor(private prisma: PrismaService) {}
 
-  async findMany({ page }: RestaurantInput): Promise<RestaurantOutput> {
+  async findMany({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
     try {
       const totalResults = await this.prisma.restaurant.count();
       const restaurants = await this.prisma.restaurant.findMany({
@@ -39,18 +47,39 @@ export class RestaurantService {
     }
   }
 
-  async categoryFindOrCreate(name: string) {
-    const categoryName = name.trim().toLowerCase();
-    const categorySlug = categoryName.replace(/ /g, '-');
-    let category = await this.prisma.category.findFirst({
-      where: { slug: categorySlug },
-    });
-    if (!category) {
-      category = await this.prisma.category.create({
-        data: { slug: categorySlug, name: categoryName },
+  async find({ restaurantId }: RestaurantInput): Promise<RestaurantOutput> {
+    try {
+      const restaurant = await this.prisma.restaurant.findUnique({
+        where: { id: restaurantId },
       });
+      if (!restaurant) throw new Error('Restaurant not found');
+      return { ok: true, results: restaurant };
+    } catch (error) {
+      return { ok: false, error: error.message };
     }
-    return category;
+  }
+
+  async searchByName({
+    query,
+    page,
+  }: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
+    try {
+      const totalResults = await this.prisma.restaurant.count();
+      const restaurants = await this.prisma.restaurant.findMany({
+        skip: (page - 1) * 25,
+        take: 25,
+        where: { name: { contains: query, mode: 'insensitive' } },
+      });
+
+      return {
+        ok: true,
+        results: restaurants,
+        totalResults,
+        totalPages: Math.ceil(totalResults / 25),
+      };
+    } catch {
+      return { ok: false, error: 'Could not search for restaurants' };
+    }
   }
 
   async create(owner: User, createRestaurantInput: CreateRestaurantInputArgs) {
@@ -210,5 +239,19 @@ export class RestaurantService {
         error: 'Could not load category',
       };
     }
+  }
+
+  async categoryFindOrCreate(name: string) {
+    const categoryName = name.trim().toLowerCase();
+    const categorySlug = categoryName.replace(/ /g, '-');
+    let category = await this.prisma.category.findFirst({
+      where: { slug: categorySlug },
+    });
+    if (!category) {
+      category = await this.prisma.category.create({
+        data: { slug: categorySlug, name: categoryName },
+      });
+    }
+    return category;
   }
 }
