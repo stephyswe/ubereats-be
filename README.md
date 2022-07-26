@@ -31,8 +31,10 @@
 * Delete Dish
 
 ## Orders CRUD
-* Orders Create
-- Orders RUD
+* Create Orders 
+* Read Orders
+- Read Order
+- Orders UD
 - Orders Subscription (Owner, Customer, Delivery)
 
 - Payments Cron Jobs

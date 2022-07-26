@@ -165,6 +165,16 @@ type FindManyDishesOutput {
   results: [Dish!]!
 }
 
+input FindManyOrdersInput {
+  status: OrderStatus
+}
+
+type FindManyOrdersOutput {
+  error: String
+  ok: Boolean!
+  orders: [Order!]
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -214,10 +224,18 @@ input OrderItemOptionInputType {
   name: String!
 }
 
+enum OrderStatus {
+  Cooking
+  Delivered
+  Pending
+  PickedUp
+}
+
 type Query {
   findCategoryBySlug(input: CategoryInput!): CategoryOutput!
   findManyCategories: FindManyCategoriesOutput!
   findManyDishes: FindManyDishesOutput!
+  findManyOrders(input: FindManyOrdersInput!): FindManyOrdersOutput!
   findManyRestaurants(input: RestaurantsInput!): RestaurantsOutput!
   findRestaurant(input: RestaurantInput!): RestaurantOutput!
   me: User!
