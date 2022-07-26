@@ -17,6 +17,7 @@ import { JwtModule } from './jwt/jwt.module';
 import { MailModule } from './mail/mail.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { UsersModule } from './users/users.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { UsersModule } from './users/users.module';
       domain: process.env.MAILGUN_DOMAIN,
       fromEmail: process.env.MAILGUN_FROM_EMAIL,
     }),
+    OrdersModule,
   ],
 })
 export class AppModule implements NestModule {

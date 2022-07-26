@@ -1,5 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
+import { Order } from '../../orders/models/order.model';
 import { User } from '../../users/models/user.model';
 import { Category } from './category.model';
 import { Dish } from './dish.model';
@@ -31,4 +32,7 @@ export class Restaurant {
 
   @Field(() => [Dish])
   menu: Dish[];
+
+  @Field(() => [Order])
+  orders: Order[];
 }

@@ -1,6 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
 import { CoreInputId } from '../../common/dtos/output.dto';
+import { Order } from '../../orders/models/order.model';
 import { Restaurant } from '../../restaurants/models/restaurant.model';
 
 export enum UserRole {
@@ -28,4 +29,10 @@ export class User extends CoreInputId {
 
   @Field(() => [Restaurant])
   restaurants: Restaurant[];
+
+  @Field(() => [Order])
+  orders: Order[];
+
+  @Field(() => [Order])
+  rides: Order[];
 }

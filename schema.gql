@@ -53,6 +53,21 @@ type CreateDishOutput {
   ok: Boolean!
 }
 
+input CreateOrderInput {
+  items: [CreateOrderItemInput!]!
+  restaurantId: Int!
+}
+
+input CreateOrderItemInput {
+  dishId: Int!
+  options: [DishOptionInputType!]
+}
+
+type CreateOrderOutput {
+  error: String
+  ok: Boolean!
+}
+
 input CreateRestaurantInput {
   address: String!
   categoryName: String!
@@ -164,6 +179,7 @@ type LoginOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
+  createOrder(input: CreateOrderInput!): CreateOrderOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInput!): CreateRestaurantOutput!
   deleteDish(input: DeleteDishInput!): DeleteDishOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
@@ -172,6 +188,20 @@ type Mutation {
   updateDish(input: EditDishInput!): EditDishOutput!
   updateRestaurant(input: UpdateRestaurantInput!): UpdateRestaurantOutput!
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
+}
+
+type Order {
+  customer: User
+  driver: User
+  items: [OrderItem!]
+  restaurant: Restaurant
+  status: String
+  total: Float
+}
+
+type OrderItem {
+  dish: Dish!
+  options: [DishOption!]
 }
 
 type Query {
@@ -192,6 +222,7 @@ type Restaurant {
   id: Float!
   menu: [Dish!]!
   name: String!
+  orders: [Order!]!
   owner: User
 }
 
@@ -245,8 +276,10 @@ type UpdateRestaurantOutput {
 
 type User {
   email: String!
+  orders: [Order!]!
   password: String!
   restaurants: [Restaurant!]!
+  rides: [Order!]!
   role: String!
   verified: Boolean
 }
