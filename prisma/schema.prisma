@@ -20,6 +20,7 @@ model Restaurant {
   owner      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int // relation scalar field (used in the `@relation` attribute above) @unique
   menu       Dish[]
+  orders     Order[]
 }
 
 model User {
@@ -32,6 +33,8 @@ model User {
   updatedAt    DateTime      @default(now())
   Verification Verification?
   restaurants  Restaurant[]
+  orders       Order[]       @relation("customer")
+  rides        Order[]       @relation("driver")
 }
 
 enum UserRole {
@@ -56,12 +59,41 @@ model Category {
 }
 
 model Dish {
-  id           Int        @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   name         String
   price        Int
   photo        String?
   description  String?
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId Int
   options      Json?
+  OrderItem    OrderItem[]
+}
+
+model Order {
+  id           Int         @id @default(autoincrement())
+  customer     User?       @relation("customer", fields: [customerId], references: [id])
+  customerId   Int?
+  driver       User?       @relation("driver", fields: [driverId], references: [id], onDelete: SetNull)
+  driverId     Int?      
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId Int?
+  items        OrderItem[]
+  total        Int?
+  status       OrderStatus @default(Pending)
+}
+
+model OrderItem {
+  id      Int     @id @default(autoincrement())
+  dish    Dish    @relation(fields: [dishId], references: [id])
+  dishId  Int
+  Order   Order[]
+  options Json?
+}
+
+enum OrderStatus {
+  Pending
+  Cooking
+  PickedUp
+  Delivered
 }

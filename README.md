@@ -30,6 +30,14 @@
 * Edit Dish
 * Delete Dish
 
+## Orders CRUD
+* Orders Create
+- Orders RUD
+- Orders Subscription (Owner, Customer, Delivery)
+
+- Payments Cron Jobs
+- Payments (Paddle - alt. to Stripe)
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
