@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from '../../prisma/prisma.service';
 import { User } from '../users/models/user.model';
-
-import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
+import { CreateOrderOutput } from './dtos/create-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -10,7 +10,7 @@ export class OrderService {
 
   async createOrder(
     customer: User,
-    { restaurantId, items }: CreateOrderInput,
+    { restaurantId, items },
   ): Promise<CreateOrderOutput> {
     try {
       const restaurant = await this.prisma.restaurant.findUnique({
@@ -24,22 +24,16 @@ export class OrderService {
         };
       }
 
-      const order = await this.prisma.order.create({
-        data: {
-          customerId: 1,
-        },
-      });
-
-      return { ok: true };
-
-      /*
-
-      
+      let orderFinalPrice = 0;
+      const orderItems = [];
 
       for (const item of items) {
-        const dish = await this.prisma.dish.findUnique({
+        let dish;
+        // eslint-disable-next-line prefer-const
+        dish = await this.prisma.dish.findUnique({
           where: { id: item.dishId },
         });
+
         if (!dish) {
           // abort this whole thing
           return { ok: false, error: 'Dish not found.' };
@@ -48,15 +42,18 @@ export class OrderService {
         let dishFinalPrice = dish.price;
         for (const itemOption of item.options) {
           const dishOption = dish.options.find(
-            (dishOption) => dishOption.name === itemOption.name,
+            (dishOption: { name: any }) => dishOption.name === itemOption.name,
           );
+
           if (dishOption) {
             if (dishOption.extra) {
               dishFinalPrice = dishFinalPrice + dishOption.extra;
             } else {
               const dishOptionChoice = dishOption.choices?.find(
-                (optionChoice) => optionChoice.name === itemOption.choice,
+                (optionChoice: { name: any }) =>
+                  optionChoice.name === itemOption.choice,
               );
+
               if (dishOptionChoice) {
                 if (dishOptionChoice.extra) {
                   dishFinalPrice = dishFinalPrice + dishOptionChoice.extra;
@@ -66,25 +63,25 @@ export class OrderService {
           }
         }
         orderFinalPrice = orderFinalPrice + dishFinalPrice;
-        const orderItem = await this.orderItems.save(
-          this.orderItems.create({
-            dish,
-            options: item.options,
-          }),
-        );
-        orderItems.push(orderItem);
+
+        orderItems.push({
+          dishId: dish.id,
+          options: item.options,
+        });
       }
-      const order = await this.orders.save(
-        this.orders.create({
-          customer,
-          restaurant,
+
+      await this.prisma.order.create({
+        data: {
+          customerId: customer.id,
+          restaurantId: restaurant.id,
           total: orderFinalPrice,
-          items: orderItems,
-        }),
-      );
-      return {
-        ok: true,
-      }; */
+          items: {
+            create: orderItems,
+          },
+        },
+      });
+
+      return { ok: true };
     } catch (error) {
       return { ok: false, error };
     }

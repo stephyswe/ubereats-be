@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
-import { Dish, DishOption } from '../../restaurants/models/dish.model';
+import { Dish } from '../../restaurants/models/dish.model';
 import { CoreInputId } from './../../common/dtos/output.dto';
 
 @InputType('OrderItemOptionInputType', { isAbstract: true })
@@ -19,6 +19,6 @@ export class OrderItem extends CoreInputId {
   @Field(() => Dish)
   dish: Dish;
 
-  @Field(() => [DishOption], { nullable: true })
-  options?: DishOption[];
+  @Field(() => [OrderItemOption], { nullable: true })
+  options?: OrderItemOption[];
 }

@@ -60,7 +60,7 @@ input CreateOrderInput {
 
 input CreateOrderItemInput {
   dishId: Int!
-  options: [DishOptionInputType!]
+  options: [OrderItemOptionInputType!]
 }
 
 type CreateOrderOutput {
@@ -201,7 +201,17 @@ type Order {
 
 type OrderItem {
   dish: Dish!
-  options: [DishOption!]
+  options: [OrderItemOption!]
+}
+
+type OrderItemOption {
+  choice: String
+  name: String!
+}
+
+input OrderItemOptionInputType {
+  choice: String
+  name: String!
 }
 
 type Query {
