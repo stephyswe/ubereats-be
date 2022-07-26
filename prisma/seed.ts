@@ -6,6 +6,11 @@ const userData: Prisma.UserCreateInput[] = [
   {
     email: 'user@email.com',
     password: '$2a$10$TrsLWPbVb8QH5HZJ86ttyOHMXFpKA025T89ydK52U4mLNQm5oKd1a',
+    role: 'Client',
+  },
+  {
+    email: 'admin@email.com',
+    password: '$2a$10$TrsLWPbVb8QH5HZJ86ttyOHMXFpKA025T89ydK52U4mLNQm5oKd1a',
     role: 'Owner',
   },
 ];
@@ -26,28 +31,30 @@ async function main() {
     });
     console.log(`Created verification with id: ${verification.id}`);
 
-    const category = await prisma.category.create({
-      data: {
-        name: 'korean bbq',
-        coverImg: null,
-        slug: 'korean-bbq',
-      },
-    });
+    if (user.email === 'admin@email.com') {
+      const category = await prisma.category.create({
+        data: {
+          name: 'korean bbq',
+          coverImg: null,
+          slug: 'korean-bbq',
+        },
+      });
 
-    console.log(`Created category with id: ${category.id}`);
+      console.log(`Created category with id: ${category.id}`);
 
-    // one restaurant by user
-    const restaurant = await prisma.restaurant.create({
-      data: {
-        name: 'BBQ House',
-        coverImg: 'https://',
-        address: '123 Altavista',
-        categoryId: category.id,
-        userId: user.id,
-      },
-    });
+      // one restaurant by user
+      const restaurant = await prisma.restaurant.create({
+        data: {
+          name: 'BBQ House',
+          coverImg: 'https://',
+          address: '123 Altavista',
+          categoryId: category.id,
+          userId: user.id,
+        },
+      });
 
-    console.log(`Created restaurant with id: ${restaurant.id}`);
+      console.log(`Created restaurant with id: ${restaurant.id}`);
+    }
   }
 
   console.log(`Seeding finished.`);
