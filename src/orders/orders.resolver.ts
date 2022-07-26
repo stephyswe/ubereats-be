@@ -9,6 +9,7 @@ import { Role } from '../auth/role.decorator';
 import { User } from '../users/models/user.model';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput, FindOrderOutput } from './dtos/find-order.dto';
+import { UpdateOrderInput, UpdateOrderOutput } from './dtos/update-order.dto';
 import { Order } from './models/order.model';
 import { OrderService } from './orders.service';
 
@@ -42,5 +43,14 @@ export class OrderResolver {
     createOrderInput: CreateOrderInput,
   ): Promise<CreateOrderOutput> {
     return this.orderService.createOrder(customer, createOrderInput);
+  }
+
+  @Mutation(() => UpdateOrderOutput)
+  @Role(['Any'])
+  async updateOrder(
+    @CurrentUser() user: User,
+    @Args('input') updateOrderInput: UpdateOrderInput,
+  ): Promise<UpdateOrderOutput> {
+    return this.orderService.updateOrder(user, updateOrderInput);
   }
 }

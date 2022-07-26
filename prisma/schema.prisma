@@ -75,7 +75,7 @@ model Order {
   customer     User?       @relation("customer", fields: [customerId], references: [id])
   customerId   Int?
   driver       User?       @relation("driver", fields: [driverId], references: [id], onDelete: SetNull)
-  driverId     Int?      
+  driverId     Int?
   restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
   restaurantId Int?
   items        OrderItem[]
@@ -94,6 +94,7 @@ model OrderItem {
 enum OrderStatus {
   Pending
   Cooking
+  Cooked
   PickedUp
   Delivered
 }
