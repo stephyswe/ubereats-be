@@ -2,7 +2,7 @@
 CREATE TYPE "UserRole" AS ENUM ('Client', 'Owner', 'Delivery');
 
 -- CreateEnum
-CREATE TYPE "OrderStatus" AS ENUM ('Pending', 'Cooking', 'PickedUp', 'Delivered');
+CREATE TYPE "OrderStatus" AS ENUM ('Pending', 'Cooking', 'Cooked', 'PickedUp', 'Delivered');
 
 -- CreateTable
 CREATE TABLE "Restaurant" (

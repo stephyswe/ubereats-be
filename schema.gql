@@ -206,6 +206,7 @@ type Mutation {
   editProfile(input: EditProfileInputArgs!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
   updateDish(input: EditDishInput!): EditDishOutput!
+  updateOrder(input: UpdateOrderInput!): UpdateOrderOutput!
   updateRestaurant(input: UpdateRestaurantInput!): UpdateRestaurantOutput!
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
@@ -215,7 +216,7 @@ type Order {
   driver: User
   items: [OrderItem!]
   restaurant: Restaurant
-  status: String
+  status: OrderStatus
   total: Float
 }
 
@@ -235,6 +236,7 @@ input OrderItemOptionInputType {
 }
 
 enum OrderStatus {
+  Cooked
   Cooking
   Delivered
   Pending
@@ -298,6 +300,16 @@ type SearchRestaurantOutput {
   results: [Restaurant!]
   totalPages: Int
   totalResults: Int
+}
+
+input UpdateOrderInput {
+  id: Float!
+  status: OrderStatus
+}
+
+type UpdateOrderOutput {
+  error: String
+  ok: Boolean!
 }
 
 input UpdateRestaurantInput {

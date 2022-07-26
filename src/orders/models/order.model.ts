@@ -15,6 +15,7 @@ import { OrderItem } from './order-item.model';
 export enum OrderStatus {
   Pending = 'Pending',
   Cooking = 'Cooking',
+  Cooked = 'Cooked',
   PickedUp = 'PickedUp',
   Delivered = 'Delivered',
 }
@@ -40,7 +41,7 @@ export class Order extends CoreInputId {
   @IsNumber()
   total?: number;
 
-  @Field(() => String)
+  @Field(() => OrderStatus)
   @IsEnum(OrderStatus)
   status?: OrderStatus;
 }

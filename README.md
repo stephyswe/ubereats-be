@@ -34,7 +34,8 @@
 * Create Orders 
 * Read Orders
 * Read Order
-- Orders UD
+* Update Order
+- Orders D
 - Orders Subscription (Owner, Customer, Delivery)
 
 - Payments Cron Jobs

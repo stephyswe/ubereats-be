@@ -6,6 +6,8 @@ import { User, UserRole } from '../users/models/user.model';
 import { CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput } from './dtos/find-order.dto';
 import { FindManyOrdersInput } from './dtos/find-orders.dto';
+import { UpdateOrderInput, UpdateOrderOutput } from './dtos/update-order.dto';
+import { OrderStatus } from './models/order.model';
 
 @Injectable()
 export class OrderService {
@@ -164,6 +166,47 @@ export class OrderService {
     }
   }
 
+  async updateOrder(
+    user: User,
+    { id: orderId, status }: UpdateOrderInput,
+  ): Promise<UpdateOrderOutput> {
+    try {
+      const order = await this.prisma.order.findUnique({
+        where: { id: orderId },
+      });
+
+      if (!order) {
+        return {
+          ok: false,
+          error: 'Order not found.',
+        };
+      }
+
+      if (!this.canUpdateOrder(user, status)) {
+        return {
+          ok: false,
+          error: 'You cant update without permission',
+        };
+      }
+
+      await this.prisma.order.update({
+        where: { id: orderId },
+        data: {
+          status,
+        },
+      });
+
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: 'Could not update order.',
+      };
+    }
+  }
+
   canSeeOrder(user: User, order): boolean {
     let canSee = true;
 
@@ -177,5 +220,25 @@ export class OrderService {
       canSee = false;
     }
     return canSee;
+  }
+
+  canUpdateOrder(user: User, status: OrderStatus) {
+    let canUpdate = true;
+    if (user.role === UserRole.Client) {
+      canUpdate = false;
+    }
+
+    if (user.role === UserRole.Owner) {
+      if (status !== OrderStatus.Cooking && status !== OrderStatus.Cooked) {
+        canUpdate = false;
+      }
+    }
+
+    if (user.role === UserRole.Delivery) {
+      if (status !== OrderStatus.PickedUp && status !== OrderStatus.Delivered) {
+        canUpdate = false;
+      }
+    }
+    return canUpdate;
   }
 }
