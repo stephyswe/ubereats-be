@@ -296,9 +296,9 @@ export class RestaurantService {
   async updateDish(owner: User, editDishInput: EditDishInput) {
     try {
       const id = editDishInput.dishId;
-      const newOptions = editDishInput.options;
-
+      const newOptions = editDishInput.options as string;
       delete editDishInput.dishId;
+      delete editDishInput.options;
 
       const dish = await this.prisma.dish.findUnique({
         where: { id },
@@ -317,11 +317,13 @@ export class RestaurantService {
         };
       }
 
+      console.log('editDishInput', editDishInput);
+
       await this.prisma.dish.update({
         where: { id },
         data: {
-          name: 'name',
-          options: editDishInput.options as string,
+          ...editDishInput,
+          options: newOptions,
         },
       });
 

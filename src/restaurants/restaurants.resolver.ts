@@ -120,6 +120,7 @@ export class DishResolver {
   }
 
   @Mutation(() => CreateDishOutput)
+  @Role(['Owner'])
   createDish(
     @CurrentUser() owner: User,
     @Args('input') createDishInput: CreateDishInput,

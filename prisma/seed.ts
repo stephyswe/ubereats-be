@@ -53,7 +53,52 @@ async function main() {
         },
       });
 
-      console.log(`Created restaurant with id: ${restaurant.id}`);
+      // create a dish on restaurant
+      const dish = await prisma.dish.create({
+        data: {
+          name: 'Mexican Chicken',
+          restaurantId: 1,
+          options: [
+            {
+              name: 'Spice Level',
+              choices: [
+                {
+                  name: 'Little Bit',
+                },
+                {
+                  name: 'Strong',
+                },
+              ],
+            },
+            {
+              name: 'Pickle',
+              extra: 1,
+            },
+            {
+              name: 'Size',
+              choices: [
+                {
+                  name: 'L',
+                  extra: 2,
+                },
+                {
+                  name: 'XL',
+                  extra: 5,
+                },
+              ],
+            },
+          ],
+          price: 12,
+          description: 'Delicious!',
+        },
+        include: {
+          restaurant: true,
+        },
+      });
+
+      console.log(
+        `Created dish with id: ${dish.id} on restaurant id: ${restaurant.id}`,
+      );
     }
   }
 
