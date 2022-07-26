@@ -1,12 +1,55 @@
 import { Injectable } from '@nestjs/common';
+import { Order } from '@prisma/client';
 
 import { PrismaService } from '../../prisma/prisma.service';
-import { User } from '../users/models/user.model';
+import { User, UserRole } from '../users/models/user.model';
 import { CreateOrderOutput } from './dtos/create-order.dto';
+import { FindManyOrdersInput } from './dtos/find-orders.dto';
 
 @Injectable()
 export class OrderService {
   constructor(private prisma: PrismaService) {}
+
+  async findManyOrders(user: User, { status }: FindManyOrdersInput) {
+    try {
+      let orders: Order[];
+      if (user.role === UserRole.Client) {
+        orders = await this.prisma.order.findMany({
+          where: {
+            customerId: user.id,
+            ...(status && { status }),
+          },
+        });
+      } else if (user.role === UserRole.Delivery) {
+        orders = await this.prisma.order.findMany({
+          where: {
+            driverId: user.id,
+            ...(status && { status }),
+          },
+        });
+      } else if (user.role === UserRole.Owner) {
+        const restaurants = await this.prisma.restaurant.findMany({
+          where: {
+            userId: user.id,
+          },
+          include: { orders: true },
+        });
+        orders = restaurants.map((restaurant) => restaurant.orders).flat(1);
+        if (status) {
+          orders = orders.filter((order) => order.status === status);
+        }
+      }
+      return {
+        ok: true,
+        orders,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not find orders',
+      };
+    }
+  }
 
   async createOrder(
     customer: User,
