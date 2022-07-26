@@ -8,6 +8,7 @@ import { CurrentUser } from '../auth/auth-user.decorator';
 import { Role } from '../auth/role.decorator';
 import { User } from '../users/models/user.model';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
+import { FindOrderInput, FindOrderOutput } from './dtos/find-order.dto';
 import { Order } from './models/order.model';
 import { OrderService } from './orders.service';
 
@@ -22,6 +23,15 @@ export class OrderResolver {
     @Args('input') findOrdersInput: FindManyOrdersInput,
   ) {
     return this.orderService.findManyOrders(user, findOrdersInput);
+  }
+
+  @Query(() => FindOrderOutput)
+  @Role(['Any'])
+  async findOrder(
+    @CurrentUser() user: User,
+    @Args('input') findOrderInput: FindOrderInput,
+  ) {
+    return this.orderService.findOrder(user, findOrderInput);
   }
 
   @Mutation(() => CreateOrderOutput)
