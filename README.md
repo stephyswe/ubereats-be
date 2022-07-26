@@ -33,7 +33,7 @@
 ## Orders CRUD
 * Create Orders 
 * Read Orders
-- Read Order
+* Read Order
 - Orders UD
 - Orders Subscription (Owner, Customer, Delivery)
 

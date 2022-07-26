@@ -175,6 +175,16 @@ type FindManyOrdersOutput {
   orders: [Order!]
 }
 
+input FindOrderInput {
+  id: Float!
+}
+
+type FindOrderOutput {
+  error: String
+  ok: Boolean!
+  order: Order
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -237,6 +247,7 @@ type Query {
   findManyDishes: FindManyDishesOutput!
   findManyOrders(input: FindManyOrdersInput!): FindManyOrdersOutput!
   findManyRestaurants(input: RestaurantsInput!): RestaurantsOutput!
+  findOrder(input: FindOrderInput!): FindOrderOutput!
   findRestaurant(input: RestaurantInput!): RestaurantOutput!
   me: User!
   searchRestaurant(input: SearchRestaurantInput!): SearchRestaurantOutput!

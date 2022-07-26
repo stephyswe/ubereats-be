@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Order } from '@prisma/client';
+import { Order as PrismaOrders } from '@prisma/client';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { User, UserRole } from '../users/models/user.model';
 import { CreateOrderOutput } from './dtos/create-order.dto';
+import { FindOrderInput } from './dtos/find-order.dto';
 import { FindManyOrdersInput } from './dtos/find-orders.dto';
 
 @Injectable()
@@ -12,7 +13,7 @@ export class OrderService {
 
   async findManyOrders(user: User, { status }: FindManyOrdersInput) {
     try {
-      let orders: Order[];
+      let orders: PrismaOrders[];
       if (user.role === UserRole.Client) {
         orders = await this.prisma.order.findMany({
           where: {
@@ -47,6 +48,39 @@ export class OrderService {
       return {
         ok: false,
         error: 'Could not find orders',
+      };
+    }
+  }
+
+  async findOrder(user: User, { id }: FindOrderInput) {
+    try {
+      const order = await this.prisma.order.findUnique({
+        where: { id },
+        include: { restaurant: true },
+      });
+
+      if (!order) {
+        return {
+          ok: false,
+          error: 'Order not found.',
+        };
+      }
+
+      if (!this.canSeeOrder(user, order)) {
+        return {
+          ok: false,
+          error: 'You cant see that',
+        };
+      }
+
+      return {
+        ok: true,
+        order,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error,
       };
     }
   }
@@ -128,5 +162,20 @@ export class OrderService {
     } catch (error) {
       return { ok: false, error };
     }
+  }
+
+  canSeeOrder(user: User, order): boolean {
+    let canSee = true;
+
+    if (user.role === UserRole.Client && order.customerId !== user.id) {
+      canSee = false;
+    }
+    if (user.role === UserRole.Delivery && order.driverId !== user.id) {
+      canSee = false;
+    }
+    if (user.role === UserRole.Owner && order.restaurant.userId !== user.id) {
+      canSee = false;
+    }
+    return canSee;
   }
 }
