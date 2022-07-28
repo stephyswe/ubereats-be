@@ -40,7 +40,7 @@
 * Orders Subscription 
 * Pending Orders (s: newOrder) (t: createOrder(newOrder))
 * Cooked Order (Delivery) (s: cookedOrder) (t: updateOrder(cookedOrder))
-- Order Status (Customer, Delivery, Owner) (s: orderUpdate) (t: updateOrder(orderUpdate))
+* Order Status (Customer, Delivery, Owner) (s: orderUpdate) (t: updateOrder(orderUpdate))
 - Pending Pickup Order (Delivery) (s: orderUpdate) (t: updateOrder(orderUpdate))
 
 - Payments Cron Jobs
