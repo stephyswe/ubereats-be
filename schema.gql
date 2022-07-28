@@ -303,6 +303,7 @@ type SearchRestaurantOutput {
 }
 
 type Subscription {
+  cookedOrders: Order!
   pendingOrders: Order!
   subMe: User!
 }
