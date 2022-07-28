@@ -36,7 +36,11 @@
 * Read Order
 * Update Order
 - Orders D
-- Orders Subscription (Owner, Customer, Delivery)
+
+* Orders Subscription 
+* Pending Orders (s: newOrder) (t: createOrder(newOrder))
+- Order Status (Customer, Delivery, Owner) (s: orderUpdate) (t: updateOrder(orderUpdate))
+- Pending Pickup Order (Delivery) (s: orderUpdate) (t: updateOrder(orderUpdate))
 
 - Payments Cron Jobs
 - Payments (Paddle - alt. to Stripe)

@@ -302,6 +302,11 @@ type SearchRestaurantOutput {
   totalResults: Int
 }
 
+type Subscription {
+  pendingOrders: Order!
+  subMe: User!
+}
+
 input UpdateOrderInput {
   id: Float!
   status: OrderStatus
