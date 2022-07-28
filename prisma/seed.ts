@@ -14,6 +14,11 @@ const userData: Prisma.UserCreateInput[] = [
     role: 'Owner',
   },
   {
+    email: 'delivery@email.com',
+    password: '$2a$10$TrsLWPbVb8QH5HZJ86ttyOHMXFpKA025T89ydK52U4mLNQm5oKd1a',
+    role: 'Delivery',
+  },
+  {
     email: 'user@email.com',
     password: '$2a$10$TrsLWPbVb8QH5HZJ86ttyOHMXFpKA025T89ydK52U4mLNQm5oKd1a',
     role: 'Client',

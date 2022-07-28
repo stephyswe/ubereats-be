@@ -3,7 +3,11 @@ import { Order as PrismaOrders } from '@prisma/client';
 import { PubSub } from 'graphql-subscriptions';
 
 import { PrismaService } from '../../prisma/prisma.service';
-import { NEW_PENDING_ORDER, PUB_SUB } from '../common/common.constants';
+import {
+  NEW_COOKED_ORDER,
+  NEW_PENDING_ORDER,
+  PUB_SUB,
+} from '../common/common.constants';
 import { User, UserRole } from '../users/models/user.model';
 import { CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput } from './dtos/find-order.dto';
@@ -176,21 +180,25 @@ export class OrderService {
     }
   }
 
+  async findById(id: number) {
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+    });
+
+    if (!order) {
+      return {
+        ok: false,
+        error: 'Order not found.',
+      };
+    }
+  }
+
   async updateOrder(
     user: User,
     { id: orderId, status }: UpdateOrderInput,
   ): Promise<UpdateOrderOutput> {
     try {
-      const order = await this.prisma.order.findUnique({
-        where: { id: orderId },
-      });
-
-      if (!order) {
-        return {
-          ok: false,
-          error: 'Order not found.',
-        };
-      }
+      await this.findById(orderId);
 
       if (!this.canUpdateOrder(user, status)) {
         return {
@@ -199,12 +207,22 @@ export class OrderService {
         };
       }
 
-      await this.prisma.order.update({
+      const newOrder = await this.prisma.order.update({
         where: { id: orderId },
         data: {
           status,
         },
+        include: { restaurant: true, customer: true },
       });
+
+      if (user.role === UserRole.Owner) {
+        if (status === OrderStatus.Cooked) {
+          await this.pubSub.publish(NEW_COOKED_ORDER, {
+            cookedOrders: { ...newOrder, status },
+          });
+        }
+      }
+      console.log(newOrder);
 
       return {
         ok: true,

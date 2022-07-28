@@ -8,7 +8,11 @@ import { Inject } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import { CurrentUser } from '../auth/auth-user.decorator';
 import { Role } from '../auth/role.decorator';
-import { NEW_PENDING_ORDER, PUB_SUB } from '../common/common.constants';
+import {
+  NEW_COOKED_ORDER,
+  NEW_PENDING_ORDER,
+  PUB_SUB,
+} from '../common/common.constants';
 import { User } from '../users/models/user.model';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput, FindOrderOutput } from './dtos/find-order.dto';
@@ -67,7 +71,13 @@ export class OrderResolver {
     resolve: ({ pendingOrders: { order } }) => order,
   })
   @Role(['Owner'])
-  async pendingOrders(@CurrentUser() user: User) {
+  pendingOrders(@CurrentUser() user: User) {
     return this.pubSub.asyncIterator(NEW_PENDING_ORDER);
+  }
+
+  @Subscription(() => Order)
+  @Role(['Delivery'])
+  cookedOrders(@CurrentUser() user: User) {
+    return this.pubSub.asyncIterator(NEW_COOKED_ORDER);
   }
 }
