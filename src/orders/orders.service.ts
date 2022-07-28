@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Order as PrismaOrders } from '@prisma/client';
+import { PubSub } from 'graphql-subscriptions';
 
 import { PrismaService } from '../../prisma/prisma.service';
+import { NEW_PENDING_ORDER, PUB_SUB } from '../common/common.constants';
 import { User, UserRole } from '../users/models/user.model';
 import { CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput } from './dtos/find-order.dto';
@@ -11,7 +13,10 @@ import { OrderStatus } from './models/order.model';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub,
+  ) {}
 
   async findManyOrders(user: User, { status }: FindManyOrdersInput) {
     try {
@@ -149,7 +154,7 @@ export class OrderService {
         });
       }
 
-      await this.prisma.order.create({
+      const order = await this.prisma.order.create({
         data: {
           customerId: customer.id,
           restaurantId: restaurant.id,
@@ -158,6 +163,11 @@ export class OrderService {
             create: orderItems,
           },
         },
+        include: { items: true, customer: true, restaurant: true },
+      });
+
+      await this.pubSub.publish(NEW_PENDING_ORDER, {
+        pendingOrders: { order, ownerId: restaurant.userId },
       });
 
       return { ok: true };

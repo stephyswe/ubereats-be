@@ -104,7 +104,6 @@ export class RestaurantService {
 
   async update(owner: User, params: UpdateRestaurantInput) {
     try {
-      console.log('hi 1', params);
       const id = params.restaurantId;
       const categoryName = params.categoryName;
       let category = null;
@@ -133,7 +132,7 @@ export class RestaurantService {
         where: { id },
         data: {
           ...params,
-          categoryId: category.id,
+          ...(categoryName && { categoryId: category.id }),
         },
       });
 
@@ -316,8 +315,6 @@ export class RestaurantService {
           error: "You can't do that.",
         };
       }
-
-      console.log('editDishInput', editDishInput);
 
       await this.prisma.dish.update({
         where: { id },
