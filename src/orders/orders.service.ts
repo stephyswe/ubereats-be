@@ -5,6 +5,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   NEW_COOKED_ORDER,
+  NEW_ORDER_UPDATE,
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from '../common/common.constants';
@@ -212,17 +213,22 @@ export class OrderService {
         data: {
           status,
         },
-        include: { restaurant: true, customer: true },
+        include: { restaurant: true, customer: true, driver: true },
       });
+
+      const cookedOrdersSub = { ...newOrder, status };
 
       if (user.role === UserRole.Owner) {
         if (status === OrderStatus.Cooked) {
           await this.pubSub.publish(NEW_COOKED_ORDER, {
-            cookedOrders: { ...newOrder, status },
+            cookedOrders: cookedOrdersSub,
           });
         }
       }
-      console.log(newOrder);
+
+      await this.pubSub.publish(NEW_ORDER_UPDATE, {
+        orderUpdates: cookedOrdersSub,
+      });
 
       return {
         ok: true,

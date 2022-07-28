@@ -35,4 +35,6 @@ export class Restaurant {
 
   @Field(() => [Order])
   orders: Order[];
+
+  userId: number;
 }

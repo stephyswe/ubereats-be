@@ -214,6 +214,7 @@ type Mutation {
 type Order {
   customer: User
   driver: User
+  driverId: Float!
   items: [OrderItem!]
   restaurant: Restaurant
   status: OrderStatus
@@ -243,6 +244,10 @@ enum OrderStatus {
   PickedUp
 }
 
+input OrderUpdatesInput {
+  id: Float!
+}
+
 type Query {
   findCategoryBySlug(input: CategoryInput!): CategoryOutput!
   findManyCategories: FindManyCategoriesOutput!
@@ -265,6 +270,7 @@ type Restaurant {
   name: String!
   orders: [Order!]!
   owner: User
+  userId: Float!
 }
 
 input RestaurantInput {
@@ -304,6 +310,7 @@ type SearchRestaurantOutput {
 
 type Subscription {
   cookedOrders: Order!
+  orderUpdates(input: OrderUpdatesInput!): Order!
   pendingOrders: Order!
   subMe: User!
 }
