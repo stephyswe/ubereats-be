@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import * as Joi from 'joi';
 import { AuthModule } from './auth/auth.module';
@@ -62,6 +63,7 @@ import { UsersModule } from './users/users.module';
       domain: process.env.MAILGUN_DOMAIN,
       fromEmail: process.env.MAILGUN_FROM_EMAIL,
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     RestaurantsModule,
     UsersModule,

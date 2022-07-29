@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { User } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   CreatePaymentInput,
   CreatePaymentOutput,
 } from './dtos/create-payment.dto';
-import { FindManyPaymentOutput } from './dtos/find-payments.dto';
 
 @Injectable()
 export class PaymentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private schedulerRegistry: SchedulerRegistry,
+  ) {}
 
   async findManyPayments(user: User) {
     try {
@@ -55,6 +58,17 @@ export class PaymentService {
           transactionId,
           userId: owner.id,
           restaurantId: restaurant.id,
+        },
+      });
+
+      const date = new Date();
+      date.setDate(date.getDate() + 7);
+
+      await this.prisma.restaurant.update({
+        where: { id: restaurantId },
+        data: {
+          promotedUntil: date,
+          isPromoted: true,
         },
       });
 
