@@ -1,27 +1,24 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Order as PrismaOrders } from '@prisma/client';
-import { PubSub } from 'graphql-subscriptions';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   NEW_COOKED_ORDER,
   NEW_ORDER_UPDATE,
   NEW_PENDING_ORDER,
-  PUB_SUB,
 } from '../common/common.constants';
+import { pubSub } from '../common/common.module';
 import { User, UserRole } from '../users/models/user.model';
 import { CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput } from './dtos/find-order.dto';
 import { FindManyOrdersInput } from './dtos/find-orders.dto';
+import { TakeOrderInput, TakeOrderOutput } from './dtos/take-order.dto';
 import { UpdateOrderInput, UpdateOrderOutput } from './dtos/update-order.dto';
 import { OrderStatus } from './models/order.model';
 
 @Injectable()
 export class OrderService {
-  constructor(
-    private prisma: PrismaService,
-    @Inject(PUB_SUB) private readonly pubSub: PubSub,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async findManyOrders(user: User, { status }: FindManyOrdersInput) {
     try {
@@ -171,7 +168,7 @@ export class OrderService {
         include: { items: true, customer: true, restaurant: true },
       });
 
-      await this.pubSub.publish(NEW_PENDING_ORDER, {
+      await pubSub.publish(NEW_PENDING_ORDER, {
         pendingOrders: { order, ownerId: restaurant.userId },
       });
 
@@ -216,18 +213,16 @@ export class OrderService {
         include: { restaurant: true, customer: true, driver: true },
       });
 
-      const cookedOrdersSub = { ...newOrder, status };
-
       if (user.role === UserRole.Owner) {
-        if (status === OrderStatus.Cooked) {
-          await this.pubSub.publish(NEW_COOKED_ORDER, {
-            cookedOrders: cookedOrdersSub,
+        if (newOrder.status === OrderStatus.Cooked) {
+          await pubSub.publish(NEW_COOKED_ORDER, {
+            cookedOrders: newOrder,
           });
         }
       }
 
-      await this.pubSub.publish(NEW_ORDER_UPDATE, {
-        orderUpdates: cookedOrdersSub,
+      await pubSub.publish(NEW_ORDER_UPDATE, {
+        orderUpdates: newOrder,
       });
 
       return {
@@ -237,6 +232,54 @@ export class OrderService {
       return {
         ok: false,
         error: 'Could not update order.',
+      };
+    }
+  }
+
+  async updateOrderDriver(
+    driver: User,
+    { id }: TakeOrderInput,
+  ): Promise<TakeOrderOutput> {
+    try {
+      const order = await this.prisma.order.findUnique({
+        where: { id },
+        include: { driver: true },
+      });
+
+      if (!order) {
+        return {
+          ok: false,
+          error: 'Order not found',
+        };
+      }
+      if (order.driver !== null) {
+        return {
+          ok: false,
+          error: 'This order already has a driver',
+        };
+      }
+
+      const driverOrder = await this.prisma.order.update({
+        where: {
+          id,
+        },
+        data: {
+          driverId: driver.id,
+        },
+        include: { driver: true, restaurant: true, customer: true },
+      });
+
+      await pubSub.publish(NEW_ORDER_UPDATE, {
+        orderUpdates: driverOrder,
+      });
+
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not update order with driver.',
       };
     }
   }
