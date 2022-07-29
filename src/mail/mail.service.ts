@@ -14,7 +14,7 @@ export class MailService {
     subject: string,
     template: string,
     emailVars: EmailVar[],
-  ): Promise<boolean> {
+  ): Promise<Boolean> {
     const form = new FormData();
     form.append('from', `Uber Eats <mailgun@${this.options.domain}>`);
     form.append('to', `stephaniiehallberg@gmail.com`);
@@ -36,6 +36,7 @@ export class MailService {
           body: form,
         },
       );
+      return true;
     } catch (error) {
       return false;
     }
