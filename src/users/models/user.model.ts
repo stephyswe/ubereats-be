@@ -21,7 +21,7 @@ export class User extends CoreInputId {
   @Field(() => String)
   password: string;
 
-  @Field(() => String)
+  @Field(() => UserRole)
   role: UserRole;
 
   @Field(() => Boolean)

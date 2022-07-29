@@ -11,7 +11,7 @@ export class CreateAccountInputType {
   @Field()
   password: string;
 
-  @Field(() => String)
+  @Field(() => UserRole)
   role: UserRole;
 }
 
