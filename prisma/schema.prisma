@@ -11,17 +11,19 @@ datasource db {
 }
 
 model Restaurant {
-  id         Int       @id @default(autoincrement())
-  name       String    @unique
-  coverImg   String?
-  address    String
-  category   Category  @relation(fields: [categoryId], references: [id])
-  categoryId Int // relation scalar field (used in the `@relation` attribute above) @unique
-  owner      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int // relation scalar field (used in the `@relation` attribute above) @unique
-  menu       Dish[]
-  orders     Order[]
-  Payment    Payment[]
+  id            Int       @id @default(autoincrement())
+  name          String    @unique
+  coverImg      String?
+  address       String
+  category      Category  @relation(fields: [categoryId], references: [id])
+  categoryId    Int // relation scalar field (used in the `@relation` attribute above) @unique
+  owner         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int // relation scalar field (used in the `@relation` attribute above) @unique
+  menu          Dish[]
+  orders        Order[]
+  Payment       Payment[]
+  isPromoted    Boolean   @default(false)
+  promotedUntil DateTime @default(now())
 }
 
 model User {
@@ -98,8 +100,8 @@ model Payment {
   transactionId String
   user          User       @relation(fields: [userId], references: [id])
   restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
-  userId       Int
-  restaurantId Int
+  userId        Int
+  restaurantId  Int
 }
 
 enum OrderStatus {

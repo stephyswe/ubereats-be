@@ -90,6 +90,11 @@ type CreateRestaurantOutput {
   ok: Boolean!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 input DeleteDishInput {
   dishId: Int!
 }
@@ -292,11 +297,13 @@ type Restaurant {
   category: Category
   coverImg: String
   id: Float!
+  isPromoted: Boolean!
   menu: [Dish!]!
   name: String!
   orders: [Order!]!
   owner: User
-  userId: Float!
+  promotedUntil: DateTime
+  userId: Int!
 }
 
 input RestaurantInput {

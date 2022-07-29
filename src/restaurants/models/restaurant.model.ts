@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
 import { Order } from '../../orders/models/order.model';
 import { User } from '../../users/models/user.model';
@@ -36,5 +36,12 @@ export class Restaurant {
   @Field(() => [Order])
   orders: Order[];
 
+  @Field(() => Int)
   userId: number;
+
+  @Field(() => Boolean)
+  isPromoted: boolean;
+
+  @Field(() => Date, { nullable: true })
+  promotedUntil: Date;
 }

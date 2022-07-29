@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Restaurant" ADD COLUMN     "isPromoted" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "promotedUntil" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
