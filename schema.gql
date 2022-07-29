@@ -234,6 +234,22 @@ type Mutation {
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
 
+input MyRestaurantInput {
+  id: Float!
+}
+
+type MyRestaurantOutput {
+  error: String
+  ok: Boolean!
+  restaurant: Restaurant
+}
+
+type MyRestaurantsOutput {
+  error: String
+  ok: Boolean!
+  restaurants: [Restaurant!]!
+}
+
 type Order {
   customer: User
   driver: User
@@ -288,6 +304,8 @@ type Query {
   findOrder(input: FindOrderInput!): FindOrderOutput!
   findRestaurant(input: RestaurantInput!): RestaurantOutput!
   me: User!
+  myRestaurant(input: MyRestaurantInput!): MyRestaurantOutput!
+  myRestaurants: MyRestaurantsOutput!
   searchRestaurant(input: SearchRestaurantInput!): SearchRestaurantOutput!
   userProfile(userId: Float!): UserProfileOutput!
 }

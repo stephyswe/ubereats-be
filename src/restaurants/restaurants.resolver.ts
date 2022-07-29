@@ -30,6 +30,11 @@ import {
   RestaurantsOutput,
 } from './dtos/find-restaurants.dto';
 import {
+  MyRestaurantInput,
+  MyRestaurantOutput,
+} from './dtos/my-restaurant.dto';
+import { MyRestaurantsOutput } from './dtos/my-restaurants.dto';
+import {
   SearchRestaurantInput,
   SearchRestaurantOutput,
 } from './dtos/search-restaurant.dto';
@@ -46,6 +51,21 @@ import { RestaurantService } from './restaurants.service';
 @Resolver(() => Restaurant)
 export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
+
+  @Query((returns) => MyRestaurantsOutput)
+  @Role(['Owner'])
+  myRestaurants(@CurrentUser() owner: User) {
+    return this.restaurantService.myRestaurants(owner);
+  }
+
+  @Query((returns) => MyRestaurantOutput)
+  @Role(['Owner'])
+  myRestaurant(
+    @CurrentUser() owner: User,
+    @Args('input') myRestaurantInput: MyRestaurantInput,
+  ) {
+    return this.restaurantService.myRestaurant(owner, myRestaurantInput);
+  }
 
   @Query(() => RestaurantsOutput)
   findManyRestaurants(@Args('input') args: RestaurantsInput) {
