@@ -11,16 +11,17 @@ datasource db {
 }
 
 model Restaurant {
-  id         Int      @id @default(autoincrement())
-  name       String   @unique
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
   coverImg   String?
   address    String
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id])
   categoryId Int // relation scalar field (used in the `@relation` attribute above) @unique
-  owner      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  owner      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int // relation scalar field (used in the `@relation` attribute above) @unique
   menu       Dish[]
   orders     Order[]
+  Payment    Payment[]
 }
 
 model User {
@@ -35,6 +36,7 @@ model User {
   restaurants  Restaurant[]
   orders       Order[]       @relation("customer")
   rides        Order[]       @relation("driver")
+  Payment      Payment[]
 }
 
 enum UserRole {
@@ -89,6 +91,15 @@ model OrderItem {
   dishId  Int
   Order   Order[]
   options Json?
+}
+
+model Payment {
+  id            Int        @id @default(autoincrement())
+  transactionId String
+  user          User       @relation(fields: [userId], references: [id])
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  userId       Int
+  restaurantId Int
 }
 
 enum OrderStatus {

@@ -11,6 +11,7 @@ import { upperDirectiveTransformer } from './common/directives/upper-case.direct
 import { JwtModule } from './jwt/jwt.module';
 import { MailModule } from './mail/mail.module';
 import { OrdersModule } from './orders/orders.module';
+import { PaymentModule } from './payment/payment.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { UsersModule } from './users/users.module';
 
@@ -66,6 +67,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     OrdersModule,
     CommonModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}

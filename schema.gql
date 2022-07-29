@@ -68,6 +68,16 @@ type CreateOrderOutput {
   ok: Boolean!
 }
 
+input CreatePaymentInput {
+  restaurantId: Int!
+  transactionId: String!
+}
+
+type CreatePaymentOutput {
+  error: String
+  ok: Boolean!
+}
+
 input CreateRestaurantInput {
   address: String!
   categoryName: String!
@@ -200,6 +210,7 @@ type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
   createOrder(input: CreateOrderInput!): CreateOrderOutput!
+  createPayment(input: CreatePaymentInput!): CreatePaymentOutput!
   createRestaurant(createRestaurantDto: CreateRestaurantInput!): CreateRestaurantOutput!
   deleteDish(input: DeleteDishInput!): DeleteDishOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
@@ -247,6 +258,13 @@ enum OrderStatus {
 
 input OrderUpdatesInput {
   id: Float!
+}
+
+type Payment {
+  restaurant: Restaurant!
+  restaurantId: Int!
+  transactionId: String!
+  user: User!
 }
 
 type Query {
@@ -357,6 +375,7 @@ type User {
   email: String!
   orders: [Order!]!
   password: String!
+  payments: [Payment!]!
   restaurants: [Restaurant!]!
   rides: [Order!]!
   role: UserRole!
