@@ -12,6 +12,7 @@ import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { CategoryInput } from './dtos/find-category.dto';
 import { RestaurantInput } from './dtos/find-restaurant.dto';
 import { RestaurantsInput } from './dtos/find-restaurants.dto';
+import { MyRestaurantInput } from './dtos/my-restaurant.dto';
 import { SearchRestaurantInput } from './dtos/search-restaurant.dto';
 import { EditDishInput } from './dtos/update-dish.dto';
 import { UpdateRestaurantInput } from './dtos/update-restaurant.dto';
@@ -170,6 +171,40 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not delete restaurant.',
+      };
+    }
+  }
+
+  async myRestaurants(owner: User) {
+    try {
+      const restaurants = await this.prisma.restaurant.findMany({
+        where: { userId: owner.id },
+      });
+      return {
+        restaurants,
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not find restaurants.',
+      };
+    }
+  }
+  async myRestaurant(owner: User, { id }: MyRestaurantInput) {
+    try {
+      const restaurant = await this.prisma.restaurant.findUnique({
+        where: { id: owner.id },
+        include: { menu: true, orders: true },
+      });
+      return {
+        restaurant,
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not find restaurant',
       };
     }
   }
