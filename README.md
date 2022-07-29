@@ -34,7 +34,6 @@
 * Read Orders
 * Read Order
 * Update Order
-- Orders D
 
 ## Order Subscription 
 
@@ -46,6 +45,8 @@
 
 ## Payment
 
+* Create Payment
+- Find Payment
 - Payments Cron Jobs
 - Payments (Paddle - alt. to Stripe)
 
