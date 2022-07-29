@@ -363,7 +363,6 @@ type Subscription {
   cookedOrders: SubscriptionOutput!
   orderUpdates(input: OrderUpdatesInput!): SubscriptionOutput!
   pendingOrders: SubscriptionOutput!
-  subMe: User!
 }
 
 type SubscriptionOutput {

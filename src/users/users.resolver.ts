@@ -1,7 +1,6 @@
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../auth/auth-user.decorator';
 import { Role } from '../auth/role.decorator';
-import { pubSub } from '../common/common.module';
 
 import {
   CreateAccountInput,
@@ -36,18 +35,7 @@ export class UsersResolver {
   @Query(() => User)
   @Role(['Any'])
   me(@CurrentUser() user: User) {
-    pubSub.publish('subMe', { subMe: user });
     return user;
-  }
-
-  @Subscription(() => User, {
-    filter: (some) => {
-      return some;
-    },
-  })
-  @Role(['Any'])
-  subMe() {
-    return pubSub.asyncIterator('subMe');
   }
 
   @Query(() => UserProfileOutput)
