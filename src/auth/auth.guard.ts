@@ -25,8 +25,6 @@ export class AuthGuard implements CanActivate {
 
     if (!gqlContext.req) return false;
 
-    //console.log('auth guard', gqlContext.req.headers);
-
     const token = gqlContext.req.headers['x-jwt'];
     if (token) {
       const decoded = this.jwtService.verify(token.toString());
@@ -34,7 +32,6 @@ export class AuthGuard implements CanActivate {
         const { user } = await this.userService.findById(decoded['id']);
 
         if (user) {
-          //console.log('auth guard - user found');
           gqlContext['user'] = user;
           if (roles.includes('Any')) {
             return true;

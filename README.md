@@ -19,32 +19,43 @@
 
 * Edit Restaurant 
 * Delete Restaurant
-
 * See Categories
 * See Restaurants by Category (pagination)
 * See Restaurants (pagination)
 * See Restaurant
 * Search Restaurant
-
 * Create Dish
 * Edit Dish
 * Delete Dish
 
-## Orders CRUD
+## Order CRUD
+
 * Create Orders 
 * Read Orders
 * Read Order
 * Update Order
 - Orders D
 
-* Orders Subscription 
+## Order Subscription 
+
 * Pending Orders (s: newOrder) (t: createOrder(newOrder))
 * Cooked Order (Delivery) (s: cookedOrder) (t: updateOrder(cookedOrder))
 * Order Status (Customer, Delivery, Owner) (s: orderUpdate) (t: updateOrder(orderUpdate))
-- Pending Pickup Order (Delivery) (s: orderUpdate) (t: updateOrder(orderUpdate))
+* Pending Pickup Order (Delivery) (s: orderUpdate) (t: updateOrder(orderUpdate))
+* Add Driver to Order
+
+## Payment
 
 - Payments Cron Jobs
 - Payments (Paddle - alt. to Stripe)
+
+## Order Status Road-map.
+1. Pending      -   Client create Order
+2. Cooking      -   Restaurant owner see pending orders & update status to Cooking
+2. Cooked       -   Restaurant owner complete dish & update status to cooked
+                -   Driver see cooked orders & add themselves
+3. PickedUp     -   Driver arrive at resturant & update status to PickUp
+4. Delivered    -   Driver delivers dish to client & update status to Delivered
 
 ## Description
 

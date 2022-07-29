@@ -207,6 +207,7 @@ type Mutation {
   login(input: LoginInput!): LoginOutput!
   updateDish(input: EditDishInput!): EditDishOutput!
   updateOrder(input: UpdateOrderInput!): UpdateOrderOutput!
+  updateOrderDriver(input: TakeOrderInput!): TakeOrderOutput!
   updateRestaurant(input: UpdateRestaurantInput!): UpdateRestaurantOutput!
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
@@ -214,7 +215,7 @@ type Mutation {
 type Order {
   customer: User
   driver: User
-  driverId: Float!
+  driverId: Float
   items: [OrderItem!]
   restaurant: Restaurant
   status: OrderStatus
@@ -309,10 +310,24 @@ type SearchRestaurantOutput {
 }
 
 type Subscription {
-  cookedOrders: Order!
-  orderUpdates(input: OrderUpdatesInput!): Order!
-  pendingOrders: Order!
+  cookedOrders: SubscriptionOutput!
+  orderUpdates(input: OrderUpdatesInput!): SubscriptionOutput!
+  pendingOrders: SubscriptionOutput!
   subMe: User!
+}
+
+type SubscriptionOutput {
+  order: Order!
+  orderId: Int!
+}
+
+input TakeOrderInput {
+  id: Float!
+}
+
+type TakeOrderOutput {
+  error: String
+  ok: Boolean!
 }
 
 input UpdateOrderInput {

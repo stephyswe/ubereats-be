@@ -44,5 +44,5 @@ export class Order extends CoreInputId {
   @Field(() => OrderStatus)
   @IsEnum(OrderStatus)
   status?: OrderStatus;
-  driverId: number;
+  driverId?: number;
 }
