@@ -31,7 +31,7 @@ input CreateAccountInput {
 input CreateAccountInputType {
   email: String!
   password: String!
-  role: String!
+  role: UserRole!
 }
 
 type CreateAccountOutput {
@@ -359,7 +359,7 @@ type User {
   password: String!
   restaurants: [Restaurant!]!
   rides: [Order!]!
-  role: String!
+  role: UserRole!
   verified: Boolean
 }
 
@@ -367,6 +367,12 @@ type UserProfileOutput {
   error: String
   ok: Boolean!
   user: User
+}
+
+enum UserRole {
+  Client
+  Delivery
+  Owner
 }
 
 input VerifyEmailInput {
