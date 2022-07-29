@@ -5,10 +5,29 @@ import {
   CreatePaymentInput,
   CreatePaymentOutput,
 } from './dtos/create-payment.dto';
+import { FindManyPaymentOutput } from './dtos/find-payments.dto';
 
 @Injectable()
 export class PaymentService {
   constructor(private prisma: PrismaService) {}
+
+  async findManyPayments(user: User) {
+    try {
+      const payments = await this.prisma.payment.findMany({
+        where: { user },
+        include: { user: true, restaurant: true },
+      });
+      return {
+        ok: true,
+        payments,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load payments.',
+      };
+    }
+  }
 
   async createPayment(
     owner: User,
