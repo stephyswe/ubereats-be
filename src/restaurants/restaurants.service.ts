@@ -85,18 +85,17 @@ export class RestaurantService {
 
       delete createRestaurantInput.categoryName;
 
-      const dataSend = {
-        ...createRestaurantInput,
-        categoryId: category.id,
-        userId: owner.id,
-      };
-
-      await this.prisma.restaurant.create({
-        data: dataSend,
+      const restaurant = await this.prisma.restaurant.create({
+        data: {
+          ...createRestaurantInput,
+          categoryId: category.id,
+          userId: owner.id,
+        },
       });
 
       return {
         ok: true,
+        restaurantId: restaurant.id,
       };
     } catch (error) {
       return { ok: false, error: 'Could not create restaurant' };
@@ -179,6 +178,7 @@ export class RestaurantService {
     try {
       const restaurants = await this.prisma.restaurant.findMany({
         where: { userId: owner.id },
+        include: { category: true },
       });
       return {
         restaurants,
