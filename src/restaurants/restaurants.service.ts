@@ -194,9 +194,10 @@ export class RestaurantService {
   async myRestaurant(owner: User, { id }: MyRestaurantInput) {
     try {
       const restaurant = await this.prisma.restaurant.findUnique({
-        where: { id: owner.id },
+        where: { id: id },
         include: { menu: true, orders: true },
       });
+
       return {
         restaurant,
         ok: true,
