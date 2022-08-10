@@ -52,13 +52,13 @@ import { RestaurantService } from './restaurants.service';
 export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
-  @Query((returns) => MyRestaurantsOutput)
+  @Query(() => MyRestaurantsOutput)
   @Role(['Owner'])
   myRestaurants(@CurrentUser() owner: User) {
     return this.restaurantService.myRestaurants(owner);
   }
 
-  @Query((returns) => MyRestaurantOutput)
+  @Query(() => MyRestaurantOutput)
   @Role(['Owner'])
   myRestaurant(
     @CurrentUser() owner: User,
