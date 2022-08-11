@@ -43,7 +43,8 @@ const restaurantData = (user: any, category: any) => {
   return {
     data: {
       name: 'BBQ House',
-      coverImg: 'https://',
+      coverImg:
+        'https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC8wY2M1NDBiOS1lMjFiLTQ1YzAtOWQ2NS1mMzMzODNiYTE5MWIuanBlZw==',
       address: '123 Altavista',
       categoryId: category.id,
       userId: user.id,
@@ -55,6 +56,10 @@ const dishData = {
   data: {
     name: 'Mexican Chicken',
     restaurantId: 1,
+    price: 12,
+    description: 'Delicious!',
+    photo:
+      'https://tb-static.uber.com/prod/image-proc/processed_images/fbf500543dbcc1a91bcb8de08a66396f/ffd640b0f9bc72838f2ebbee501a5d4b.jpeg',
     options: [
       {
         name: 'Spice Level',
@@ -85,8 +90,6 @@ const dishData = {
         ],
       },
     ],
-    price: 12,
-    description: 'Delicious!',
   },
   include: {
     restaurant: true,
