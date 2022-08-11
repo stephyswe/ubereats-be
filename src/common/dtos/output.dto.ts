@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class CoreOutput {
@@ -9,7 +9,7 @@ export class CoreOutput {
   ok: boolean;
 }
 
-@InputType()
+@ObjectType()
 export class CoreInputId {
   @Field()
   id: number;

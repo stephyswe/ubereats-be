@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
-import { CoreInputId } from './../../common/dtos/output.dto';
+import { CoreInputId } from '../../common/dtos/output.dto';
 import { Restaurant } from './restaurant.model';
 
 @InputType({ isAbstract: true })

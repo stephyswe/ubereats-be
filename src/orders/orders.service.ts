@@ -172,7 +172,7 @@ export class OrderService {
         pendingOrders: { order, ownerId: restaurant.userId },
       });
 
-      return { ok: true };
+      return { ok: true, orderId: order.id };
     } catch (error) {
       return { ok: false, error };
     }

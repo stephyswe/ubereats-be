@@ -5,6 +5,7 @@
 type Category {
   countRestaurants: Int!
   coverImg: String
+  id: Float!
   name: String!
   restaurants: [Restaurant!]
   slug: String!
@@ -43,6 +44,7 @@ input CreateDishInput {
   description: String
   name: String!
   options: [DishOptionInputType!]
+  photo: String
   price: Int
   restaurantId: Int!
 }
@@ -66,6 +68,7 @@ input CreateOrderItemInput {
 type CreateOrderOutput {
   error: String
   ok: Boolean!
+  orderId: Int!
 }
 
 input CreatePaymentInput {
@@ -116,6 +119,7 @@ type DeleteRestaurantOutput {
 
 type Dish {
   description: String
+  id: Float!
   name: String!
   options: [DishOption!]
   photo: String
@@ -255,6 +259,7 @@ type Order {
   customer: User
   driver: User
   driverId: Float
+  id: Float!
   items: [OrderItem!]
   restaurant: Restaurant
   status: OrderStatus
@@ -263,6 +268,7 @@ type Order {
 
 type OrderItem {
   dish: Dish!
+  id: Float!
   options: [OrderItemOption!]
 }
 
@@ -289,6 +295,7 @@ input OrderUpdatesInput {
 }
 
 type Payment {
+  id: Float!
   restaurant: Restaurant!
   restaurantId: Int!
   transactionId: String!
@@ -405,6 +412,7 @@ type UpdateRestaurantOutput {
 
 type User {
   email: String!
+  id: Float!
   orders: [Order!]!
   password: String!
   payments: [Payment!]!
