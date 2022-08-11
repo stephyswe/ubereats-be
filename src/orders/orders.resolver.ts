@@ -15,7 +15,6 @@ import { pubSub } from '../common/common.module';
 import { User } from '../users/models/user.model';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput, FindOrderOutput } from './dtos/find-order.dto';
-import { SubscriptionOutput } from './dtos/subscription.dto';
 import { TakeOrderInput, TakeOrderOutput } from './dtos/take-order.dto';
 import { OrderUpdatesInput } from './dtos/update-dto';
 import { UpdateOrderInput, UpdateOrderOutput } from './dtos/update-order.dto';
@@ -72,30 +71,28 @@ export class OrderResolver {
     return this.orderService.updateOrderDriver(driver, takeOrderInput);
   }
 
-  @Subscription(() => SubscriptionOutput, {
+  @Subscription(() => Order, {
     filter: ({ pendingOrders: { ownerId } }, _, { user: { id } }) => {
       return ownerId === id;
     },
-    resolve: ({ pendingOrders: { order } }) => {
-      return { order: order, orderId: order.id };
-    },
+    resolve: ({ pendingOrders: { order } }) => order,
   })
   @Role(['Owner'])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pendingOrders(@CurrentUser() _: User) {
     return pubSub.asyncIterator(NEW_PENDING_ORDER);
   }
 
-  @Subscription(() => SubscriptionOutput, {
-    resolve: ({ cookedOrders: order }) => {
-      return { order: order, orderId: order.id };
-    },
+  @Subscription(() => Order, {
+    resolve: ({ cookedOrders: order }) => order,
   })
   @Role(['Delivery'])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   cookedOrders(@CurrentUser() _: User) {
     return pubSub.asyncIterator(NEW_COOKED_ORDER);
   }
 
-  @Subscription(() => SubscriptionOutput, {
+  @Subscription(() => Order, {
     filter: (
       { orderUpdates: order }: { orderUpdates: Order },
       { input }: { input: OrderUpdatesInput },
@@ -110,11 +107,10 @@ export class OrderResolver {
       }
       return order.id === input.id;
     },
-    resolve: ({ orderUpdates: order }) => {
-      return { order: order, orderId: order.id };
-    },
+    resolve: ({ orderUpdates: order }) => order,
   })
   @Role(['Any'])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   orderUpdates(@Args('input') _: OrderUpdatesInput) {
     return pubSub.asyncIterator(NEW_ORDER_UPDATE);
   }
