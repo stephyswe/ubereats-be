@@ -65,7 +65,7 @@ export class OrderService {
     try {
       const order = await this.prisma.order.findUnique({
         where: { id },
-        include: { restaurant: true },
+        include: { restaurant: true, customer: true },
       });
 
       if (!order) {

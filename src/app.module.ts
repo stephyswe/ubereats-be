@@ -14,8 +14,8 @@ import { MailModule } from './mail/mail.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentModule } from './payment/payment.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
-import { UsersModule } from './users/users.module';
 import { UploadsModule } from './uploads/uploads.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -71,7 +71,7 @@ import { UploadsModule } from './uploads/uploads.module';
     OrdersModule,
     CommonModule,
     PaymentModule,
-	UploadsModule,
+    UploadsModule,
   ],
 })
 export class AppModule {}

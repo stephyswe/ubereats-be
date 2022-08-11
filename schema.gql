@@ -368,14 +368,9 @@ type SearchRestaurantOutput {
 }
 
 type Subscription {
-  cookedOrders: SubscriptionOutput!
-  orderUpdates(input: OrderUpdatesInput!): SubscriptionOutput!
-  pendingOrders: SubscriptionOutput!
-}
-
-type SubscriptionOutput {
-  order: Order!
-  orderId: Int!
+  cookedOrders: Order!
+  orderUpdates(input: OrderUpdatesInput!): Order!
+  pendingOrders: Order!
 }
 
 input TakeOrderInput {
