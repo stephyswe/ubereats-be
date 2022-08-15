@@ -23,7 +23,7 @@ model Restaurant {
   orders        Order[]
   Payment       Payment[]
   isPromoted    Boolean   @default(false)
-  promotedUntil DateTime @default(now())
+  promotedUntil DateTime  @default(now())
 }
 
 model User {
@@ -68,6 +68,7 @@ model Dish {
   price        Int
   photo        String?
   description  String?
+  type         String?
   restaurant   Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId Int
   options      Json?
