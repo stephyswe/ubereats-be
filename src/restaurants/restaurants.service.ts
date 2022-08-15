@@ -224,10 +224,10 @@ export class RestaurantService {
         ok: true,
         categories,
       };
-    } catch {
+    } catch (error) {
       return {
         ok: false,
-        error: 'Could not load categories',
+        error,
       };
     }
   }
