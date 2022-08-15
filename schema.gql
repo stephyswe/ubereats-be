@@ -47,6 +47,7 @@ input CreateDishInput {
   photo: String
   price: Int
   restaurantId: Int!
+  type: String
 }
 
 type CreateDishOutput {
@@ -125,6 +126,7 @@ type Dish {
   photo: String
   price: Int
   restaurant: Restaurant
+  type: String
 }
 
 type DishChoice {

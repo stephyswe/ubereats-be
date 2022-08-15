@@ -28,6 +28,7 @@ export class RestaurantService {
       const restaurants = await this.prisma.restaurant.findMany({
         skip: (page - 1) * 25,
         take: 25,
+        include: { category: true },
       });
 
       return {

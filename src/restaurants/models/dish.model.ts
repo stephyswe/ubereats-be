@@ -23,6 +23,9 @@ export class Dish extends CoreInputId {
   @Length(5, 140)
   description?: string;
 
+  @Field(() => String)
+  type?: string;
+
   @Field(() => Restaurant)
   restaurant?: Restaurant;
 

@@ -33,10 +33,82 @@ const vertData = (user: any) => {
 
 const categoryData = {
   data: {
-    name: 'korean bbq',
-    coverImg: null,
-    slug: 'korean-bbq',
+    name: 'Fast Food',
+    coverImg:
+      'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/FastFood_CuisineCarousel@2x.png',
+    slug: 'fast-food',
   },
+};
+
+const categoryDataMany = {
+  data: [
+    {
+      name: 'Breakfast And Brunch',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Breakfast_CuisineCarousel@2x.png',
+      slug: 'breakfast-and-brunch',
+    },
+    {
+      name: 'American Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/American_CuisineCarousel@2x.png',
+      slug: 'american',
+    },
+    {
+      name: 'Mexican Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Mexican_CuisineCarousel@2x.png',
+      slug: 'mexican',
+    },
+    {
+      name: 'Chinese Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Chinese_CuisineCarousel@2x.png',
+      slug: 'chinese',
+    },
+    {
+      name: 'Japanese Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Japanese_CuisineCarousel@2x.png',
+      slug: 'japanese',
+    },
+    {
+      name: 'Italian Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Italian_CuisineCarousel@2x.png',
+      slug: 'italian',
+    },
+    {
+      name: 'Healthy Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Healthy_CuisineCarousel@2x.png',
+      slug: 'healthy',
+    },
+    {
+      name: 'Asian Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Asian_CuisineCarousel@2x.png',
+      slug: 'asian',
+    },
+    {
+      name: 'Indian Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Asian_CuisineCarousel@2x.png',
+      slug: 'indian',
+    },
+    {
+      name: 'Thai Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Thai_CuisineCarousel@2x.png',
+      slug: 'thai',
+    },
+    {
+      name: 'Taiwanese Food',
+      coverImg:
+        'https://tb-static.uber.com/prod/web-eats-v2/categories/icons/Taiwanese_CuisineCarousel@2x.png',
+      slug: 'taiwanese',
+    },
+  ],
 };
 
 const restaurantData = (user: any, category: any) => {
@@ -52,48 +124,68 @@ const restaurantData = (user: any, category: any) => {
   };
 };
 
-const dishData = {
-  data: {
-    name: 'Mexican Chicken',
-    restaurantId: 1,
-    price: 12,
-    description: 'Delicious!',
-    photo:
-      'https://tb-static.uber.com/prod/image-proc/processed_images/fbf500543dbcc1a91bcb8de08a66396f/ffd640b0f9bc72838f2ebbee501a5d4b.jpeg',
-    options: [
-      {
-        name: 'Spice Level',
-        choices: [
-          {
-            name: 'Little Bit',
-          },
-          {
-            name: 'Strong',
-          },
-        ],
-      },
-      {
-        name: 'Pickle',
-        extra: 1,
-      },
-      {
-        name: 'Size',
-        choices: [
-          {
-            name: 'L',
-            extra: 2,
-          },
-          {
-            name: 'XL',
-            extra: 5,
-          },
-        ],
-      },
-    ],
-  },
-  include: {
-    restaurant: true,
-  },
+const dishDataMany = {
+  data: [
+    {
+      restaurantId: 1,
+      name: 'Pizza Speciale',
+      price: 115,
+      type: 'Pizza',
+      description: 'Juicy!',
+      photo: '',
+      options: [],
+    },
+    {
+      restaurantId: 1,
+      name: 'Räksallad',
+      price: 115,
+      type: 'Sallader',
+      description:
+        'Räkor, vitost, ägg, citron, grekiska kalamataoliver. Isbergssallad, färska tomater, gurka, lök, vitost och bröd ingår.',
+      photo: '',
+      options: [],
+    },
+    {
+      restaurantId: 1,
+      name: 'KycklingSallad',
+      price: 115,
+      type: 'Sallader',
+      description:
+        'Kyckling, vitost, färsk paprika, ananas. Isbergssallad, färska tomater, gurka, lök, vitost och bröd ingår.',
+      photo:
+        'https://tb-static.uber.com/prod/image-proc/processed_images/fbf500543dbcc1a91bcb8de08a66396f/ffd640b0f9bc72838f2ebbee501a5d4b.jpeg',
+      options: [
+        {
+          name: 'Spice Level',
+          choices: [
+            {
+              name: 'Little Bit',
+            },
+            {
+              name: 'Strong',
+            },
+          ],
+        },
+        {
+          name: 'Pickle',
+          extra: 1,
+        },
+        {
+          name: 'Size',
+          choices: [
+            {
+              name: 'L',
+              extra: 2,
+            },
+            {
+              name: 'XL',
+              extra: 5,
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 const consoleLog = (title: any, relation: any) =>
@@ -120,13 +212,14 @@ async function main() {
       );
 
       // create a dish on restaurant
-      const dish = await prisma.dish.create(dishData);
+      const dishes = await prisma.dish.createMany(dishDataMany);
 
-      console.log(
-        `Created dish with id: ${dish.id} on restaurant id: ${restaurant.id}`,
-      );
+      console.log(`Created ${dishes.count} on restaurant id: ${restaurant.id}`);
     }
   }
+
+  // create all categories
+  await prisma.category.createMany(categoryDataMany);
 
   console.log(`Seeding finished.`);
 }
