@@ -24,6 +24,7 @@ import {
 import { FindManyCategoriesOutput } from './dtos/find-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/find-category.dto';
 import { FindManyDishesOutput } from './dtos/find-dishes.dto';
+import { findManyDishesIdsInput } from './dtos/find-many-dish-ids';
 import { RestaurantInput, RestaurantOutput } from './dtos/find-restaurant.dto';
 import {
   RestaurantsInput,
@@ -137,6 +138,11 @@ export class DishResolver {
   @Query(() => FindManyDishesOutput)
   findManyDishes() {
     return this.restaurantService.findManyDishes();
+  }
+
+  @Query(() => FindManyDishesOutput)
+  findManyDishesIds(@Args('input') findManyDishesIds: findManyDishesIdsInput) {
+    return this.restaurantService.findManyDishesIds(findManyDishesIds);
   }
 
   @Mutation(() => CreateDishOutput)

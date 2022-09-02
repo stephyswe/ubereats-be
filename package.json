@@ -54,6 +54,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "prettier-plugin-organize-imports": "^3.0.0",
+    "prisma-dbml-generator": "^0.9.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",

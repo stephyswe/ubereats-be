@@ -219,7 +219,9 @@ export class RestaurantService {
 
   async findManyCategories(): Promise<FindManyCategoriesOutput> {
     try {
-      const categories = await this.prisma.category.findMany();
+      const categories = await this.prisma.category.findMany({
+        orderBy: { id: 'asc' },
+      });
       return {
         ok: true,
         categories,
@@ -278,6 +280,17 @@ export class RestaurantService {
       });
     }
     return category;
+  }
+
+  async findManyDishesIds(dishIds: any) {
+    const results = await this.prisma.dish.findMany({
+      where: { id: { in: dishIds.dishIds } },
+      include: {
+        restaurant: true,
+      },
+    });
+
+    return { ok: true, results };
   }
 
   async findManyDishes() {

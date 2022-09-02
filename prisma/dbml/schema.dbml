@@ -1,0 +1,131 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Restaurant {
+  id Int [pk, increment]
+  name String [unique, not null]
+  coverImg String
+  address String [not null]
+  category Category [not null]
+  categoryId Int [not null]
+  owner User [not null]
+  userId Int [not null]
+  menu Dish [not null]
+  orders Order [not null]
+  Payment Payment [not null]
+  isPromoted Boolean [not null, default: false]
+  promotedUntil DateTime [default: `now()`, not null]
+}
+
+Table User {
+  id Int [pk, increment]
+  email String [not null]
+  password String [not null]
+  role UserRole [not null, default: 'Client']
+  verified Boolean [default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  Verification Verification
+  restaurants Restaurant [not null]
+  orders Order [not null]
+  rides Order [not null]
+  Payment Payment [not null]
+}
+
+Table Verification {
+  id Int [pk, increment]
+  code String [not null]
+  user User [not null]
+  userId Int [unique, not null]
+}
+
+Table Category {
+  id Int [pk, increment]
+  name String [not null]
+  coverImg String
+  slug String [unique, not null]
+  restaurants Restaurant [not null]
+}
+
+Table Dish {
+  id Int [pk, increment]
+  name String [not null]
+  price Int [not null]
+  photo String
+  description String
+  type String
+  restaurant Restaurant [not null]
+  restaurantId Int [not null]
+  options Json
+  OrderItem OrderItem [not null]
+}
+
+Table Order {
+  id Int [pk, increment]
+  customer User
+  customerId Int
+  driver User
+  driverId Int
+  restaurant Restaurant
+  restaurantId Int
+  items OrderItem [not null]
+  total Int
+  status OrderStatus [not null, default: 'Pending']
+}
+
+Table OrderItem {
+  id Int [pk, increment]
+  dish Dish [not null]
+  dishId Int [not null]
+  Order Order [not null]
+  options Json
+}
+
+Table Payment {
+  id Int [pk, increment]
+  transactionId String [not null]
+  user User [not null]
+  restaurant Restaurant [not null]
+  userId Int [not null]
+  restaurantId Int [not null]
+}
+
+Table OrderToOrderItem {
+  itemsId Int [ref: > OrderItem.id]
+  orderId Int [ref: > Order.id]
+}
+
+Enum UserRole {
+  Client
+  Owner
+  Delivery
+}
+
+Enum OrderStatus {
+  Pending
+  Cooking
+  Cooked
+  PickedUp
+  Delivered
+}
+
+Ref: Restaurant.categoryId > Category.id
+
+Ref: Restaurant.userId > User.id [delete: Cascade]
+
+Ref: Verification.userId - User.id
+
+Ref: Dish.restaurantId > Restaurant.id [delete: Cascade]
+
+Ref: Order.customerId > User.id
+
+Ref: Order.driverId > User.id
+
+Ref: Order.restaurantId > Restaurant.id
+
+Ref: OrderItem.dishId > Dish.id
+
+Ref: Payment.userId > User.id
+
+Ref: Payment.restaurantId > Restaurant.id

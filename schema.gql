@@ -308,6 +308,7 @@ type Query {
   findCategoryBySlug(input: CategoryInput!): CategoryOutput!
   findManyCategories: FindManyCategoriesOutput!
   findManyDishes: FindManyDishesOutput!
+  findManyDishesIds(input: findManyDishesIdsInput!): FindManyDishesOutput!
   findManyOrders(input: FindManyOrdersInput!): FindManyOrdersOutput!
   findManyPayments: FindManyPaymentOutput!
   findManyRestaurants(input: RestaurantsInput!): RestaurantsOutput!
@@ -438,4 +439,8 @@ input VerifyEmailInput {
 type VerifyEmailOutput {
   error: String
   ok: Boolean!
+}
+
+input findManyDishesIdsInput {
+  dishIds: [Int!]!
 }
