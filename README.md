@@ -7,6 +7,13 @@ yarn test:v
 http://localhost:6006/?path=/story/example-introduction--page
 
 
+## Seed to New Elephantsql DB
+npm run prisma:prod:migrate
+npm run prisma:seed
+
+## Run Server
+npm run start:dev
+
 ## Fix to DB
 update prisma
 npm install prisma
