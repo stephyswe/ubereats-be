@@ -1,3 +1,63 @@
+# Storybook
+yarn storybook
+http://localhost:6006/?path=/story/example-introduction--page
+
+# Test
+yarn test:v
+http://localhost:6006/?path=/story/example-introduction--page
+
+
+# Initial
+
+npm install
+docker compose up -d
+npm run dev
+
+Seed:
+npm run prisma:migrate
+npm run prisma:seed
+npx run dev
+
+http://localhost:3001/graphql
+
+Frontend: 
+yarn install 
+yarn dev
+
+How to order.
+
+User:
+Goto http://localhost:3000/auth/login
+login detail: user@email.com / password
+
+Goto http://localhost:3000/client/store/1
+Order a Pizza Speciale - Confirm Order
+Pushed to Order Site (http://localhost:3000/client/order/X)
+Status: "Pending"
+
+Owner: (firefox)
+Goto http://localhost:3000/client/order/X
+Accept Order
+Order Cooked
+
+Delivery: (chrome)
+Goto http://localhost:3000/auth/login
+login with delivery@email.com / password
+
+Goto http://localhost:3000/driver/dashboard
+
+Accept Challenge
+Picked Up / Order Delivered
+
+Order #4
+total: $115
+Prepared By: BBQ House
+Deliver To: user@email.com
+Driver: delivery@email.com
+Status: Delivered
+Thank you for using Nuber Eats
+
+
 ## User Entity:
 
 - id
