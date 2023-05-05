@@ -4,11 +4,13 @@ import { User } from '@prisma/client';
 import { Role } from 'src/auth/role.decorator';
 import { CurrentUser } from '../auth/auth-user.decorator';
 
-import { CreatePaymentInput, CreatePaymentOutput } from './dtos/create-payment.dto';
+import {
+  CreatePaymentInput,
+  CreatePaymentOutput,
+} from './dtos/create-payment.dto';
 import { FindManyPaymentOutput } from './dtos/find-payments.dto';
 import { Payment } from './models/payment.model';
 import { PaymentService } from './payment.service';
-
 
 @Resolver(() => Payment)
 export class PaymentResolver {
