@@ -7,6 +7,10 @@ yarn test:v
 http://localhost:6006/?path=/story/example-introduction--page
 
 
+## Fix to DB
+update prisma
+npm install prisma
+
 # Initial
 
 npm install
@@ -20,8 +24,8 @@ npx run dev
 
 http://localhost:3001/graphql
 
-Frontend: 
-yarn install 
+Frontend:
+yarn install
 yarn dev
 
 How to order.
@@ -77,7 +81,7 @@ Thank you for using Nuber Eats
 
 ## Restaurant CRUD:
 
-* Edit Restaurant 
+* Edit Restaurant
 * Delete Restaurant
 * See Categories
 * See Restaurants by Category (pagination)
@@ -90,12 +94,12 @@ Thank you for using Nuber Eats
 
 ## Order CRUD
 
-* Create Orders 
+* Create Orders
 * Read Orders
 * Read Order
 * Update Order
 
-## Order Subscription 
+## Order Subscription
 
 * Pending Orders (s: newOrder) (t: createOrder(newOrder))
 * Cooked Order (Delivery) (s: cookedOrder) (t: updateOrder(cookedOrder))
