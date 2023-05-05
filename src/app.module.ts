@@ -34,6 +34,7 @@ import { UsersModule } from './users/users.module';
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      introspection: true,
       persistedQueries: false,
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
