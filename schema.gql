@@ -12,7 +12,7 @@ type Category {
 }
 
 input CategoryInput {
-  page: Int = 1
+  page: Int! = 1
   slug: String!
 }
 
@@ -346,7 +346,7 @@ type RestaurantOutput {
 }
 
 input RestaurantsInput {
-  page: Int = 1
+  page: Int! = 1
 }
 
 type RestaurantsOutput {
@@ -358,7 +358,7 @@ type RestaurantsOutput {
 }
 
 input SearchRestaurantInput {
-  page: Int = 1
+  page: Int! = 1
   query: String!
 }
 
