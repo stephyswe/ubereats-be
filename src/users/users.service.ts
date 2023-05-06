@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { PrismaService } from '../../prisma/prisma.service';
 import { CoreOutput } from '../common/dtos/output.dto';
+import { PrismaService } from '../common/prisma.service';
 import { JwtService } from '../jwt/jwt.service';
 import { MailService } from '../mail/mail.service';
 import { CreateAccountInput } from './dtos/create-account.dto';

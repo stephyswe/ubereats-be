@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { PrismaService } from '../prisma/prisma.service';
 import { AppModule } from '../src/app.module';
+import { PrismaService } from '../src/common/prisma.service';
 
 jest.mock('got', () => {
   return {

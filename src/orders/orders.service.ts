@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Order as PrismaOrders } from '@prisma/client';
 
-import { PrismaService } from '../../prisma/prisma.service';
 import {
   NEW_COOKED_ORDER,
   NEW_ORDER_UPDATE,
   NEW_PENDING_ORDER,
 } from '../common/common.constants';
 import { pubSub } from '../common/common.module';
+import { PrismaService } from '../common/prisma.service';
 import { User, UserRole } from '../users/models/user.model';
 import { CreateOrderOutput } from './dtos/create-order.dto';
 import { FindOrderInput } from './dtos/find-order.dto';

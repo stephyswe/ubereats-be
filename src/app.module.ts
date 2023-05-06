@@ -6,6 +6,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 
+import { PrismaModule } from './common/prisma.module';
 import { config } from './config-service';
 import { GqlConfigService } from './gql-config.service';
 import { JwtModule } from './jwt/jwt.module';
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
       domain: process.env.MAILGUN_DOMAIN,
       fromEmail: process.env.MAILGUN_FROM_EMAIL,
     }),
+    PrismaModule,
     ScheduleModule.forRoot(),
     AuthModule,
     RestaurantsModule,
