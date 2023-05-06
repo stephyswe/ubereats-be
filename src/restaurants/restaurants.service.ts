@@ -199,6 +199,14 @@ export class RestaurantService {
         include: { menu: true, orders: true },
       });
 
+      // check if the user is the owner of the restaurant
+      if (restaurant.userId !== owner.id) {
+        return {
+          ok: false,
+          error: "You can't see this.",
+        };
+      }
+
       return {
         restaurant,
         ok: true,
