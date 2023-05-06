@@ -19,7 +19,7 @@
     "prisma:migrate": "dotenv -e .env.dev -- npx prisma migrate dev --name init",
     "prisma:prod:migrate": "dotenv -e .env.dev -- npx prisma db push",
     "prisma:seed": "dotenv -e .env.dev -- npx prisma db seed reset",
-    "prisma:reset": "dotenv -e .env.dev -- npx prisma migrate reset",
+    "prisma:reset": "dotenv -e .env.dev -- npx prisma migrate reset --force",
     "start:dev": "rimraf dist && cross-env NODE_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
