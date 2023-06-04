@@ -7,6 +7,7 @@ import { CommonModule } from './common/common.module';
 
 import { PrismaModule } from './common/prisma.module';
 
+import { ConfigModule } from '@nestjs/config';
 import { GqlConfigService } from './gql-config.service';
 import { JwtModule } from './jwt/jwt.module';
 import { MailModule } from './mail/mail.module';
@@ -18,7 +19,10 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    //ConfigModule.forRoot(config),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      //envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.test',
+    }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useClass: GqlConfigService,
