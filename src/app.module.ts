@@ -1,13 +1,12 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 
 import { PrismaModule } from './common/prisma.module';
-import { config } from './config-service';
+
 import { GqlConfigService } from './gql-config.service';
 import { JwtModule } from './jwt/jwt.module';
 import { MailModule } from './mail/mail.module';
