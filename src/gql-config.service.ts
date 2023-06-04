@@ -1,4 +1,7 @@
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriverConfig } from '@nestjs/apollo';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -39,7 +42,11 @@ export class GqlConfigService implements GqlOptionsFactory {
         'graphql-ws': true,
         'subscriptions-transport-ws': true,
       },
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      plugins: [
+        process.env.NODE_ENV === 'production'
+          ? ApolloServerPluginLandingPageProductionDefault()
+          : ApolloServerPluginLandingPageLocalDefault(),
+      ],
     };
   }
 }
